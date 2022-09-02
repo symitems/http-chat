@@ -1,0 +1,11 @@
+version: "3"
+services:
+  webserver:
+    image: node:16.17.0
+    tty: true
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: npm start
+    ports:
+      - "3000:3000"
