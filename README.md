@@ -5,5 +5,7 @@ Simple chat application consisting of frontend UI and backend API communicating 
 ## Usage
 
 ```
+git clone https://github.com/iwsh/http-chat.git
+cd http-chat
 docker compose up
 ```
