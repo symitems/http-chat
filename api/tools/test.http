@@ -1,0 +1,10 @@
+POST http://localhost:8000/messages/ HTTP/1.1
+content-type: application/json
+
+{
+    "username": "iwsh",
+    "text": "Sample Message!"
+}
+
+###
+GET http://localhost:8000/messages/ HTTP/1.1
