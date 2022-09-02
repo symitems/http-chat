@@ -9,3 +9,5 @@ git clone https://github.com/iwsh/http-chat.git
 cd http-chat
 docker compose up
 ```
+
+Access to http://localhost:3000
