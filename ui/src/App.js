@@ -20,11 +20,11 @@ function App() {
   const inputInApiRootUrlRef = useRef()
 
   const handleName = event => {
-    setpost({username:event.target.value, text: post.text})
+    setPost({username:event.target.value, text: post.text})
   }
 
   const handleText = event => {
-    setpost({username: post.username, text: event.target.value})
+    setPost({username: post.username, text: event.target.value})
   }
 
   const handleInApiRootUrl = event => {
@@ -45,20 +45,28 @@ function App() {
   }, [apiRootUrl])
 
   const clickSubmit = (e) => {
-    // POST処理
-    axios.post(apiRootUrl + "/messages/", post)
-    .then(res => {
-      console.log(res)
-      setMsgs(res.data)
-    })
-    .catch((error) => {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-      console.log('Error', error.message);
-    })
-    inputNameRef.current.value = "";
-    inputTextRef.current.value = "";
+    // Validation
+    if (validPost()) {
+      // POST処理
+      axios.post(apiRootUrl + "/messages/", post)
+      .then(res => {
+        console.log(res)
+        setMsgs(res.data)
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        console.log('Error', error.message);
+      })
+      inputNameRef.current.value = "";
+      inputTextRef.current.value = "";
+      setPost({})
+    }
+  }
+
+  const validPost = () => {
+    return ( post.username && post.text )
   }
   
   const clickStart = (e) => {
