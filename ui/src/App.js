@@ -14,14 +14,10 @@ function App() {
   const [msgs, setMsgs] = useState([])
   const [post, setpost] = useState({})
   const [apiRootUrl, setApiRootUrl] = useState()
+  const [inApiRootUrl, setInApiRootUrl] = useState()
   const inputNameRef = useRef()
   const inputTextRef = useRef()
-
-  const urllist = [
-    {value: '', label: 'Choose Host'},
-    {value: 'http://localhost:8000', label: 'localhost'},
-    {value: 'http://localhost:9000', label: 'cloud'},
-  ]
+  const inputInApiRootUrlRef = useRef()
 
   const handleName = event => {
     setpost({username:event.target.value, text: post.text})
@@ -31,14 +27,12 @@ function App() {
     setpost({username: post.username, text: event.target.value})
   }
 
-  const handleApiRootUrl = event => {
-    setApiRootUrl(event.target.value)
-    setMsgs([{"created_at": "loading"}])
+  const handleInApiRootUrl = event => {
+    setInApiRootUrl(event.target.value)
   }
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log(apiRootUrl + "/messages/")
       if (apiRootUrl) {
         axios.get(apiRootUrl + "/messages/")
         .then(res => {
@@ -67,6 +61,12 @@ function App() {
     inputTextRef.current.value = "";
   }
 
+  const clickStart = (e) => {
+    setApiRootUrl(inApiRootUrl)
+    setMsgs([{"created_at": "loading"}])
+    inputInApiRootUrlRef.current.value = "";
+  }
+
   return (
     <div style={{
       margin:'auto',
@@ -74,9 +74,8 @@ function App() {
     }}>
       <h1>HTTP CHAT <small><small>by iwsh</small></small></h1>
       <div>
-        <select onChange={handleApiRootUrl}>
-          {urllist.map( u => <option value={u.value}>{u.label}</option>)}
-        </select>
+        Enter API Server URL : <input ref={inputInApiRootUrlRef} type="text" onChange={handleInApiRootUrl} required/>
+        <button type="submit" onClick={clickStart}><big>Start</big></button>
       </div>
       {(apiRootUrl)?
         <div>
