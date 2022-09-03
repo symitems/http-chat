@@ -12,9 +12,12 @@ function App() {
   // },[])
 
   const [msgs, setMsgs] = useState([])
-  const [post, setPost] = useState({})
+  const [post, setpost] = useState({})
+  const [apiRootUrl, setApiRootUrl] = useState()
+  const [inApiRootUrl, setInApiRootUrl] = useState()
   const inputNameRef = useRef()
   const inputTextRef = useRef()
+  const inputInApiRootUrlRef = useRef()
 
   const handleName = event => {
     setPost({username:event.target.value, text: post.text})
@@ -24,22 +27,28 @@ function App() {
     setPost({username: post.username, text: event.target.value})
   }
 
+  const handleInApiRootUrl = event => {
+    setInApiRootUrl(event.target.value)
+  }
+
   useEffect(() => {
-    const interval = setInterval(() => {      
-      axios.get("http://127.0.0.1:8000/messages/")
-      .then(res => {
-        console.log(res)
-        setMsgs(res.data)
-      })
+    const interval = setInterval(() => {
+      if (apiRootUrl) {
+        axios.get(apiRootUrl + "/messages/")
+        .then(res => {
+          console.log(res)
+          setMsgs(res.data)
+        })
+      }
     }, 1000);
     return () => clearInterval(interval);
-  }, [])
+  }, [apiRootUrl])
 
   const clickSubmit = (e) => {
     // Validation
     if (validPost()) {
       // POST処理
-      axios.post("http://127.0.0.1:8000/messages/", post)
+      axios.post(apiRootUrl + "/messages/", post)
       .then(res => {
         console.log(res)
         setMsgs(res.data)
@@ -60,6 +69,29 @@ function App() {
     return ( post.username && post.text )
   }
   
+  const clickStart = (e) => {
+    setApiRootUrl(inApiRootUrl)
+    setMsgs([{"created_at": "loading"}])
+    inputInApiRootUrlRef.current.value = "";
+  }
+
+  const clickClear = (e) => {
+    // DELETE処理
+    axios.delete("http://127.0.0.1:8000/messages/")
+    .then(res => {
+      console.log(res)
+      setMsgs(res.data)
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+      console.log('Error', error.message);
+    })
+    inputNameRef.current.value = "";
+    inputTextRef.current.value = "";
+  }
+
   return (
     <div style={{
       margin:'auto',
@@ -67,19 +99,26 @@ function App() {
     }}>
       <h1>HTTP CHAT <small><small>by iwsh</small></small></h1>
       <div>
-        <table cellPadding={5}>
-          <tr>
-            <td>Name:</td>
-            <td><input ref={inputNameRef} type="text" onChange={handleName} required/></td>
-          </tr>
-          <tr>
-            <td valign="middle">Message:</td>
-            <td><textarea ref={inputTextRef} cols="40" rows="5" onChange={handleText} required/></td>
-          </tr>
-          <button type="submit" onClick={clickSubmit}><big>Submit</big></button>
-        </table>
+        Enter API Server URL : <input ref={inputInApiRootUrlRef} type="text" onChange={handleInApiRootUrl} required/>
+        <button type="submit" onClick={clickStart}><big>Start</big></button>
       </div>
+      {(apiRootUrl)?
+        <div>
+          <table cellPadding={5}>
+            <tr>
+              <td>Name:</td>
+              <td><input ref={inputNameRef} type="text" onChange={handleName} required/></td>
+            </tr>
+            <tr>
+              <td valign="middle">Message:</td>
+              <td><textarea ref={inputTextRef} cols="40" rows="5" onChange={handleText} required/></td>
+            </tr>
+            <button type="submit" onClick={clickSubmit}><big>Submit</big></button>
+          </table>
+        </div>
+      :<div></div>}
       <hr></hr>
+      <button type="submit" onClick={clickClear}><big>Clear All</big></button>
       {msgs.map(msg => {
         return (
           <p>
