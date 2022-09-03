@@ -13,8 +13,14 @@ function App() {
 
   const [msgs, setMsgs] = useState([])
   const [post, setpost] = useState({})
+  const [timezone, setTimezone] = useState({})
   const inputNameRef = useRef()
   const inputTextRef = useRef()
+  const inputTimezoneRef = useRef()
+  const tzlist = [
+    {value: 'UTC', label: 'UTC'},
+    {value: 'JST', label: 'JST'},
+  ]
 
   const handleName = event => {
     setpost({username:event.target.value, text: post.text})
@@ -22,6 +28,10 @@ function App() {
 
   const handleText = event => {
     setpost({username: post.username, text: event.target.value})
+  }
+
+  const handleTimezone = event => {
+    setTimezone({timezone: event.target.value})
   }
 
   useEffect(() => {
@@ -69,12 +79,39 @@ function App() {
     inputTextRef.current.value = "";
   }
 
+  const changeTimezone = (strDate) => {
+    date = Date.parse(strDate)
+    axios.delete("http://127.0.0.1:8000/messages/")
+    .then(res => {
+      console.log(res)
+      setMsgs(res.data)
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+      console.log('Error', error.message);
+    })
+    inputNameRef.current.value = "";
+    inputTextRef.current.value = "";
+  }
+
   return (
     <div style={{
       margin:'auto',
       width:'50%'
     }}>
-      <h1>HTTP CHAT <small><small>by iwsh</small></small></h1>
+      <div style={{
+        display:'flex',
+        justifyContent:'space-between'
+      }}>
+        <div><h1>HTTP CHAT <small><small>by iwsh</small></small></h1></div>
+        <div style={{display:'flex', alignItems:'center'}}>
+          <select name="timezone" defaultValue="UTC" ref={inputTimezoneRef} onChange={handleTimezone}>
+            {tzlist.map( tz => <option value={tz.value}>{tz.label}</option>)}
+          </select>
+        </div>
+      </div>
       <div>
         <table cellPadding={5}>
           <tr>
