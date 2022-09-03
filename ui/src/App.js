@@ -12,7 +12,7 @@ function App() {
   // },[])
 
   const [msgs, setMsgs] = useState([])
-  const [post, setpost] = useState({})
+  const [post, setPost] = useState({})
   const [apiRootUrl, setApiRootUrl] = useState()
   const [inApiRootUrl, setInApiRootUrl] = useState()
   const inputNameRef = useRef()
