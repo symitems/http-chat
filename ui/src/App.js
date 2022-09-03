@@ -13,11 +13,17 @@ function App() {
 
   const [msgs, setMsgs] = useState([])
   const [post, setpost] = useState({})
+  const [apiRootUrl, setApiRootUrl] = useState({})
   const inputNameRef = useRef()
   const inputTextRef = useRef()
+  const inputApiurlRef = useRef()
 
   const handleName = event => {
     setpost({username:event.target.value, text: post.text})
+  }
+
+  const handleApiRootUrl = event => {
+    setApiRootUrl({apiRootUrl: event.target.value})
   }
 
   const handleText = event => {
@@ -25,8 +31,9 @@ function App() {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {      
-      axios.get("http://127.0.0.1:8000/messages/")
+    const interval = setInterval(() => {
+      const apiUrl = apiRootUrl + "/messages/"
+      axios.get(apiUrl)
       .then(res => {
         console.log(res)
         setMsgs(res.data)
@@ -37,7 +44,8 @@ function App() {
 
   const clickSubmit = (e) => {
     // POST処理
-    axios.post("http://127.0.0.1:8000/messages/", post)
+    const apiUrl = apiRootUrl + "/messages/"
+    axios.post(apiUrl, post)
     .then(res => {
       console.log(res)
       setMsgs(res.data)
@@ -51,7 +59,7 @@ function App() {
     inputNameRef.current.value = "";
     inputTextRef.current.value = "";
   }
-  
+
   return (
     <div style={{
       margin:'auto',
@@ -72,6 +80,9 @@ function App() {
         </table>
       </div>
       <hr></hr>
+      <div>
+        <select></select>
+      </div>
       {msgs.map(msg => {
         return (
           <p>
