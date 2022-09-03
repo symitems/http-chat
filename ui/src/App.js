@@ -12,16 +12,16 @@ function App() {
   // },[])
 
   const [msgs, setMsgs] = useState([])
-  const [post, setpost] = useState({})
+  const [post, setPost] = useState({})
   const inputNameRef = useRef()
   const inputTextRef = useRef()
 
   const handleName = event => {
-    setpost({username:event.target.value, text: post.text})
+    setPost({username:event.target.value, text: post.text})
   }
 
   const handleText = event => {
-    setpost({username: post.username, text: event.target.value})
+    setPost({username: post.username, text: event.target.value})
   }
 
   useEffect(() => {
@@ -36,20 +36,28 @@ function App() {
   }, [])
 
   const clickSubmit = (e) => {
-    // POST処理
-    axios.post("http://127.0.0.1:8000/messages/", post)
-    .then(res => {
-      console.log(res)
-      setMsgs(res.data)
-    })
-    .catch((error) => {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-      console.log('Error', error.message);
-    })
-    inputNameRef.current.value = "";
-    inputTextRef.current.value = "";
+    // Validation
+    if (validPost()) {
+      // POST処理
+      axios.post("http://127.0.0.1:8000/messages/", post)
+      .then(res => {
+        console.log(res)
+        setMsgs(res.data)
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        console.log('Error', error.message);
+      })
+      inputNameRef.current.value = "";
+      inputTextRef.current.value = "";
+      setPost({})
+    }
+  }
+
+  const validPost = () => {
+    return ( post.username && post.text )
   }
   
   return (
