@@ -22,7 +22,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", ],
     allow_credentials=True,
-    allow_methods=["GET", "POST"], 
+    allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["*"],
 )
 
@@ -41,4 +41,10 @@ def read_item():
 @app.post("/messages/")
 def post_item(msg: Msg):
     df_msg = message_manager.post_messages(msg)
+    return df_msg.to_dict("records")
+
+
+@app.delete("/messages/")
+def delete_all():
+    df_msg = message_manager.delete_messages()
     return df_msg.to_dict("records")

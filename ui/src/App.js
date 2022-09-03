@@ -25,7 +25,7 @@ function App() {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {      
+    const interval = setInterval(() => {
       axios.get("http://127.0.0.1:8000/messages/")
       .then(res => {
         console.log(res)
@@ -51,7 +51,24 @@ function App() {
     inputNameRef.current.value = "";
     inputTextRef.current.value = "";
   }
-  
+
+  const clickClear = (e) => {
+    // DELETE処理
+    axios.delete("http://127.0.0.1:8000/messages/")
+    .then(res => {
+      console.log(res)
+      setMsgs(res.data)
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+      console.log('Error', error.message);
+    })
+    inputNameRef.current.value = "";
+    inputTextRef.current.value = "";
+  }
+
   return (
     <div style={{
       margin:'auto',
@@ -72,6 +89,7 @@ function App() {
         </table>
       </div>
       <hr></hr>
+      <button type="submit" onClick={clickClear}><big>Clear All</big></button>
       {msgs.map(msg => {
         return (
           <p>
