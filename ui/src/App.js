@@ -60,11 +60,28 @@ function App() {
     inputNameRef.current.value = "";
     inputTextRef.current.value = "";
   }
-
+  
   const clickStart = (e) => {
     setApiRootUrl(inApiRootUrl)
     setMsgs([{"created_at": "loading"}])
     inputInApiRootUrlRef.current.value = "";
+  }
+
+  const clickClear = (e) => {
+    // DELETE処理
+    axios.delete("http://127.0.0.1:8000/messages/")
+    .then(res => {
+      console.log(res)
+      setMsgs(res.data)
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+      console.log('Error', error.message);
+    })
+    inputNameRef.current.value = "";
+    inputTextRef.current.value = "";
   }
 
   return (
@@ -93,6 +110,7 @@ function App() {
         </div>
       :<div></div>}
       <hr></hr>
+      <button type="submit" onClick={clickClear}><big>Clear All</big></button>
       {msgs.map(msg => {
         return (
           <p>

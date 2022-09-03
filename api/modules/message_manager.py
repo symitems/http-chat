@@ -34,6 +34,18 @@ class messageManager():
 
         return self.get_messages()
 
+    def delete_messages(self):
+        sql = "DELETE FROM messages"
+
+        conn = sqlite3.connect(self.dbname)
+        # SQLiteを操作するためのカーソルを作成
+        cur = conn.cursor()
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+
+        return self.get_messages()
+
     def create_message_table(self):
         conn = sqlite3.connect(self.dbname)
         # SQLiteを操作するためのカーソルを作成
