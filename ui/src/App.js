@@ -18,6 +18,11 @@ function App() {
   const inputTextRef = useRef()
   const inputApiurlRef = useRef()
 
+  const urllist = [
+    "http://localhost:8000",
+    "http://localhost:9000",
+  ]
+
   const handleName = event => {
     setpost({username:event.target.value, text: post.text})
   }
@@ -81,7 +86,9 @@ function App() {
       </div>
       <hr></hr>
       <div>
-        <select></select>
+        <select name="ap" defaultValue="UTC" ref={inputTimezoneRef} onChange={handleTimezone}>
+          {urllist.map( u => <option value={u.value}>{u.label}</option>)}
+        </select>
       </div>
       {msgs.map(msg => {
         return (
