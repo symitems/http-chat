@@ -37,10 +37,6 @@ function App() {
     setInApiRootUrl(event.target.value)
   }
 
-  const handleTimezone = event => {
-    setTimezone({timezone: event.target.value})
-  }
-
   useEffect(() => {
     const interval = setInterval(() => {
       if (apiRootUrl) {
@@ -103,20 +99,14 @@ function App() {
   }
 
   const changeTimezone = (strDate) => {
-    date = Date.parse(strDate)
-    axios.delete("http://127.0.0.1:8000/messages/")
-    .then(res => {
-      console.log(res)
-      setMsgs(res.data)
-    })
-    .catch((error) => {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-      console.log('Error', error.message);
-    })
-    inputNameRef.current.value = "";
-    inputTextRef.current.value = "";
+    switch(color){
+      case 'JST':
+        date = Date.parse(strDate)
+        jstdate = date + 9 * 60 * 60 * 1000
+        return [jstdate.getFullYear, ('0' + (jstdate.getMonth() + 1)).slice(-2), ('0' + jstdate.getDate()).slice(-2)].join('-') + " " + [('0' + jstdate.getHours()).slice(-2), ('0' + jstdate.getMinutes()).slice(-2), ('0' + jstdate.getSeconds()).slice(-2)].join(':')
+      default:
+        return strDate
+    }
   }
 
   return (

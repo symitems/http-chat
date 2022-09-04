@@ -1,2 +1,2 @@
-docker compose run ui npm install
-docker compose up
+docker-compose run ui npm install
+docker-compose up
