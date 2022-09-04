@@ -15,7 +15,7 @@ function App() {
   const [post, setPost] = useState({})
   const [apiRootUrl, setApiRootUrl] = useState()
   const [inApiRootUrl, setInApiRootUrl] = useState()
-  const [timezone, setTimezone] = useState({})
+  const [timezone, setTimezone] = useState()
   const inputNameRef = useRef()
   const inputTextRef = useRef()
   const inputInApiRootUrlRef = useRef()
@@ -35,6 +35,10 @@ function App() {
 
   const handleInApiRootUrl = event => {
     setInApiRootUrl(event.target.value)
+  }
+
+  const handleTimezone = event => {
+    setTimezone(event.target.value)
   }
 
   useEffect(() => {
@@ -99,11 +103,12 @@ function App() {
   }
 
   const changeTimezone = (strDate) => {
-    switch(color){
+    switch(timezone){
       case 'JST':
-        date = Date.parse(strDate)
-        jstdate = date + 9 * 60 * 60 * 1000
-        return [jstdate.getFullYear, ('0' + (jstdate.getMonth() + 1)).slice(-2), ('0' + jstdate.getDate()).slice(-2)].join('-') + " " + [('0' + jstdate.getHours()).slice(-2), ('0' + jstdate.getMinutes()).slice(-2), ('0' + jstdate.getSeconds()).slice(-2)].join(':')
+        const parseDate = Date.parse(strDate)
+        const parsejstdate = parseDate + 9 * 60 * 60 * 1000
+        const jstdate = new Date(parsejstdate)
+        return [jstdate.getFullYear(), ('0' + (jstdate.getMonth() + 1)).slice(-2), ('0' + jstdate.getDate()).slice(-2)].join('-') + " " + [('0' + jstdate.getHours()).slice(-2), ('0' + jstdate.getMinutes()).slice(-2), ('0' + jstdate.getSeconds()).slice(-2)].join(':')
       default:
         return strDate
     }
@@ -150,7 +155,7 @@ function App() {
         return (
           <p>
             <div>
-              <b><big>{msg.username}</big></b> <small>@ {msg.created_at}</small>
+              <b><big>{msg.username}</big></b> <small>@ {changeTimezone(msg.created_at)}</small>
             </div>
             <div>
               <big>{msg.text}</big>
