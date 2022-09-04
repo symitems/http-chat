@@ -6,14 +6,8 @@ class messageManager():
     def __init__(self, dbname) -> None:
         self.dbname = dbname
 
-    def get_messages(self, filter={}):
-        sql = "SELECT * FROM messages ORDER BY created_at DESC "
-        if filter:
-            sql += "WHERE "
-            for k, v in filter.items():
-                sql += f"{k}='{v}' AND "
-            sql.removesuffix("AND ")
-        sql += " LIMIT 100;"
+    def get_messages(self):
+        sql = "SELECT * FROM messages ORDER BY created_at DESC LIMIT 100;"
 
         conn = sqlite3.connect(self.dbname)
         df_message = pd.read_sql_query(sql, conn)
