@@ -80,9 +80,13 @@ function App() {
   }
 
   const clickStart = (e) => {
-    setApiRootUrl(inApiRootUrl)
-    setMsgs([{"created_at": "loading"}])
-    inputInApiRootUrlRef.current.value = "";
+    // Validation
+    if (inApiRootUrl) {
+      setApiRootUrl(inApiRootUrl)
+      setMsgs([{"created_at": inApiRootUrl, "text": "Now Loading..."}])
+      inputInApiRootUrlRef.current.value = ""
+      setInApiRootUrl("")
+    }
   }
 
   const clickClear = (e) => {
@@ -131,9 +135,15 @@ function App() {
         </div>
       </div>
       <div>
-        Enter API Server URL : <input ref={inputInApiRootUrlRef} type="text" onChange={handleInApiRootUrl} required/>
-        <button type="submit" onClick={clickStart}><big>Start</big></button>
+        <table cellPadding={5}>
+          <tr>
+            <td>Enter API Server URL:</td>
+            <td><input ref={inputInApiRootUrlRef} type="text" onChange={handleInApiRootUrl} required/></td>
+            <td><button type="submit" onClick={clickStart}><big>Start</big></button></td>
+          </tr>
+        </table>
       </div>
+      <hr></hr>
       {(apiRootUrl)?
         <div>
           <table cellPadding={5}>
@@ -147,9 +157,9 @@ function App() {
             </tr>
             <button type="submit" onClick={clickSubmit}><big>Submit</big></button>
           </table>
+          <hr></hr>
         </div>
       :<div></div>}
-      <hr></hr>
       <button type="submit" onClick={clickClear}><big>Clear All</big></button>
       {msgs.map(msg => {
         return (
