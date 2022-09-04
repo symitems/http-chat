@@ -167,7 +167,19 @@ function App() {
             <div>
               <b><big>{msg.username}</big></b> <small>@ {changeTimezone(msg.created_at)}</small>
             </div>
-            <div>
+            <div style={{
+              backgroundColor: '#ffffff',
+              padding: 10,
+              marginLeft: '1%',
+              marginTop: 5,
+              marginRight: '5%',
+              // maxWidth: '50%',
+              alignSelf: 'flex-end',
+              borderRadius: 15,
+              display: 'inline-block',
+              border: '1.5px solid',
+              borderColor: '#b0e0e6',
+            }}>
               <big>{msg.text}</big>
             </div>
           </p>
