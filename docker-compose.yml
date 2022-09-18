@@ -14,5 +14,7 @@ services:
     # tty: true
     build:
       context: ./api
+    volumes:
+      - ./api:/app
     ports:
       - "8000:8000"
