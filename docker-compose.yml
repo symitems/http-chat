@@ -10,11 +10,9 @@ services:
     ports:
       - "3000:3000"
   api:
-    image: python:slim
+    # image: python:slim
     # tty: true
-    volumes:
-      - ./api:/app
-    working_dir: /app
-    command: bash init.sh
+    build:
+      context: ./api
     ports:
       - "8000:8000"
