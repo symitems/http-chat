@@ -20,7 +20,8 @@ if not os.path.isfile(dbname):
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", ],
+    # get frontend origin from env, or use "http://localhost:3000" for debug
+    allow_origins=[os.getenv("UI_ORIGIN", default="http://localhost:3000")],
     allow_credentials=True,
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["*"],
