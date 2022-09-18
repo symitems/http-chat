@@ -68,7 +68,7 @@ function App() {
   const validPost = () => {
     return ( post.username && post.text )
   }
-  
+
   const clickStart = (e) => {
     setApiRootUrl(inApiRootUrl)
     setMsgs([{"created_at": "loading"}])
@@ -77,7 +77,7 @@ function App() {
 
   const clickClear = (e) => {
     // DELETE処理
-    axios.delete("http://127.0.0.1:8000/messages/")
+    axios.delete(apiRootUrl + "/messages/")
     .then(res => {
       console.log(res)
       setMsgs(res.data)

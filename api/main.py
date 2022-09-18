@@ -17,10 +17,13 @@ message_manager = messageManager(dbname)
 if not os.path.isfile(dbname):
     message_manager.create_message_table()
 
+
 app = FastAPI()
+origin = os.getenv("UI_ORIGIN", default="http://localhost:3000")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", ],
+    # get frontend origin from env, or use "http://localhost:3000" for debug
+    allow_origins=[origin],
     allow_credentials=True,
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["*"],
@@ -29,7 +32,8 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"UI_ORIGIN": origin}
+    # return {"Hello": "World"}
 
 
 @app.get("/messages/")
