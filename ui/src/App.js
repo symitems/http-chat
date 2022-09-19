@@ -26,7 +26,7 @@ function App() {
   ]
 
   const handleName = event => {
-    setPost({username:event.target.value, text: post.text})
+    setPost({username: event.target.value, text: post.text})
   }
 
   const handleText = event => {
@@ -69,9 +69,9 @@ function App() {
         console.log(error.response.headers);
         console.log('Error', error.message);
       })
-      inputNameRef.current.value = "";
+      // clear message textarea
       inputTextRef.current.value = "";
-      setPost({})
+      setPost({username: post.username, text: ""})
     }
   }
 
@@ -157,7 +157,7 @@ function App() {
           <table cellPadding={5}>
             <tr>
               <td>Name:</td>
-              <td><input style={{fontSize:'16px'}} ref={inputNameRef} type="text" onChange={handleName} required/></td>
+              <td><input style={{fontSize:'16px'}} ref={inputNameRef} type="text" value="だるいさん" onChange={handleName} required/></td>
             </tr>
             <tr>
               <td valign="middle">Message:</td>
