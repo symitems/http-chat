@@ -109,7 +109,7 @@ function App() {
   const changeTimezone = (strDate) => {
     switch(timezone){
       case 'JST':
-        const parseDate = Date.parse(strDate)
+        const parseDate = Date.parse(strDate.replace(/-/g,"/"))
         const parsejstdate = parseDate + 9 * 60 * 60 * 1000
         const jstdate = new Date(parsejstdate)
         return [jstdate.getFullYear(), ('0' + (jstdate.getMonth() + 1)).slice(-2), ('0' + jstdate.getDate()).slice(-2)].join('-') + " " + [('0' + jstdate.getHours()).slice(-2), ('0' + jstdate.getMinutes()).slice(-2), ('0' + jstdate.getSeconds()).slice(-2)].join(':')
