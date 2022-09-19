@@ -121,7 +121,7 @@ function App() {
   return (
     <div style={{
       margin:'auto',
-      width:'70%'
+      width:'90%'
     }}>
       <div style={{
         display:'flex',
@@ -177,7 +177,7 @@ function App() {
             </div>
             <div style={{
               backgroundColor: '#ffffff',
-              padding: 10,
+              padding: 8,
               marginLeft: '1%',
               marginTop: 5,
               marginRight: '5%',
@@ -188,7 +188,7 @@ function App() {
               border: '1.5px solid',
               borderColor: '#b0e0e6',
             }}>
-              <big>{msg.text}</big>
+              {msg.text}
             </div>
           </p>
         );
