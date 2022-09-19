@@ -15,9 +15,15 @@ function App() {
   const [post, setPost] = useState({})
   const [apiRootUrl, setApiRootUrl] = useState()
   const [inApiRootUrl, setInApiRootUrl] = useState()
+  const [timezone, setTimezone] = useState()
   const inputNameRef = useRef()
   const inputTextRef = useRef()
   const inputInApiRootUrlRef = useRef()
+  const inputTimezoneRef = useRef()
+  const tzlist = [
+    {value: 'UTC', label: 'UTC'},
+    {value: 'JST', label: 'JST'},
+  ]
 
   const handleName = event => {
     setPost({username:event.target.value, text: post.text})
@@ -29,6 +35,10 @@ function App() {
 
   const handleInApiRootUrl = event => {
     setInApiRootUrl(event.target.value)
+  }
+
+  const handleTimezone = event => {
+    setTimezone(event.target.value)
   }
 
   useEffect(() => {
@@ -70,9 +80,13 @@ function App() {
   }
 
   const clickStart = (e) => {
-    setApiRootUrl(inApiRootUrl)
-    setMsgs([{"created_at": "loading"}])
-    inputInApiRootUrlRef.current.value = "";
+    // Validation
+    if (inApiRootUrl) {
+      setApiRootUrl(inApiRootUrl)
+      setMsgs([{"created_at": inApiRootUrl, "text": "Now Loading..."}])
+      inputInApiRootUrlRef.current.value = ""
+      setInApiRootUrl("")
+    }
   }
 
   const clickClear = (e) => {
@@ -92,16 +106,44 @@ function App() {
     inputTextRef.current.value = "";
   }
 
+  const changeTimezone = (strDate) => {
+    switch(timezone){
+      case 'JST':
+        const parseDate = Date.parse(strDate)
+        const parsejstdate = parseDate + 9 * 60 * 60 * 1000
+        const jstdate = new Date(parsejstdate)
+        return [jstdate.getFullYear(), ('0' + (jstdate.getMonth() + 1)).slice(-2), ('0' + jstdate.getDate()).slice(-2)].join('-') + " " + [('0' + jstdate.getHours()).slice(-2), ('0' + jstdate.getMinutes()).slice(-2), ('0' + jstdate.getSeconds()).slice(-2)].join(':')
+      default:
+        return strDate
+    }
+  }
+
   return (
     <div style={{
       margin:'auto',
       width:'50%'
     }}>
-      <h1>HTTP CHAT <small><small>by iwsh</small></small></h1>
-      <div>
-        Enter API Server URL : <input ref={inputInApiRootUrlRef} type="text" onChange={handleInApiRootUrl} required/>
-        <button type="submit" onClick={clickStart}><big>Start</big></button>
+      <div style={{
+        display:'flex',
+        justifyContent:'space-between'
+      }}>
+        <div><h1>HTTP CHAT <small><small>by iwsh</small></small></h1></div>
+        <div style={{display:'flex', alignItems:'center'}}>
+          <select name="timezone" defaultValue="UTC" ref={inputTimezoneRef} onChange={handleTimezone}>
+            {tzlist.map( tz => <option value={tz.value}>{tz.label}</option>)}
+          </select>
+        </div>
       </div>
+      <div>
+        <table cellPadding={5}>
+          <tr>
+            <td>Enter API Server URL:</td>
+            <td><input ref={inputInApiRootUrlRef} type="text" onChange={handleInApiRootUrl} required/></td>
+            <td><button type="submit" onClick={clickStart}><big>Start</big></button></td>
+          </tr>
+        </table>
+      </div>
+      <hr></hr>
       {(apiRootUrl)?
         <div>
           <table cellPadding={5}>
@@ -115,17 +157,29 @@ function App() {
             </tr>
             <button type="submit" onClick={clickSubmit}><big>Submit</big></button>
           </table>
+          <hr></hr>
         </div>
       :<div></div>}
-      <hr></hr>
       <button type="submit" onClick={clickClear}><big>Clear All</big></button>
       {msgs.map(msg => {
         return (
           <p>
             <div>
-              <b><big>{msg.username}</big></b> <small>@ {msg.created_at}</small>
+              <b><big>{msg.username}</big></b> <small>@ {changeTimezone(msg.created_at)}</small>
             </div>
-            <div>
+            <div style={{
+              backgroundColor: '#ffffff',
+              padding: 10,
+              marginLeft: '1%',
+              marginTop: 5,
+              marginRight: '5%',
+              // maxWidth: '50%',
+              alignSelf: 'flex-end',
+              borderRadius: 15,
+              display: 'inline-block',
+              border: '1.5px solid',
+              borderColor: '#b0e0e6',
+            }}>
               <big>{msg.text}</big>
             </div>
           </p>
