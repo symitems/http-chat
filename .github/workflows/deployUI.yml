@@ -29,7 +29,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "*[http-chat-ui]* Start deployment job"
+              "text": "*[http-chat-ui]* Start: Frontend deployment"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -47,3 +47,13 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./ui/build
+      - name: complete notification
+        id: slack
+        uses: slackapi/slack-github-action@v1.22.0
+        with:
+          payload: |
+            {
+              "text": "*[http-chat-ui]* Completed: Frontend deployment"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
