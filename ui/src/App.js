@@ -129,7 +129,7 @@ function App() {
       }}>
         <div><h1>HTTP CHAT <small><small>by iwsh</small></small></h1></div>
         <div style={{display:'flex', alignItems:'center'}}>
-          <select name="timezone" defaultValue="UTC" ref={inputTimezoneRef} onChange={handleTimezone}>
+          <select style={{fontSize:'16px'}} name="timezone" defaultValue="UTC" ref={inputTimezoneRef} onChange={handleTimezone}>
             {tzlist.map( tz => <option value={tz.value}>{tz.label}</option>)}
           </select>
         </div>
@@ -138,7 +138,7 @@ function App() {
         <table cellPadding={5}>
           <tr>
             <td>Enter API Server URL:</td>
-            <td><input ref={inputInApiRootUrlRef} type="text" onChange={handleInApiRootUrl} required/></td>
+            <td><input style={{fontSize:'16px'}} ref={inputInApiRootUrlRef} type="text" onChange={handleInApiRootUrl} required/></td>
             <td><button type="submit" onClick={clickStart}><big>Start</big></button></td>
           </tr>
         </table>
@@ -149,11 +149,11 @@ function App() {
           <table cellPadding={5}>
             <tr>
               <td>Name:</td>
-              <td><input ref={inputNameRef} type="text" onChange={handleName} required/></td>
+              <td><input style={{fontSize:'16px'}} ref={inputNameRef} type="text" onChange={handleName} required/></td>
             </tr>
             <tr>
               <td valign="middle">Message:</td>
-              <td><textarea ref={inputTextRef} cols="40" rows="5" onChange={handleText} required/></td>
+              <td><textarea style={{fontSize:'16px'}} ref={inputTextRef} cols="40" rows="5" onChange={handleText} required/></td>
             </tr>
             <button type="submit" onClick={clickSubmit}><big>Submit</big></button>
           </table>
