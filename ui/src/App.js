@@ -2,15 +2,7 @@ import React,{useEffect, useRef, useState}  from 'react';
 import axios from 'axios'
 
 function App() {
-  // const [count, setCount] = useState(0);
-
-  // useEffect(()=>{
-  //   const interval = setInterval(() => {
-  //     setCount(count => count + 1);
-  //   }, 5000);
-  //   return () => clearInterval(interval);
-  // },[])
-
+  const defaultlName = "だるいさん"
   const [msgs, setMsgs] = useState([])
   const [post, setPost] = useState({})
   const [apiRootUrl, setApiRootUrl] = useState()
@@ -55,10 +47,18 @@ function App() {
   }, [apiRootUrl])
 
   const clickSubmit = (e) => {
-    // Validation
-    if (validPost()) {
+    // messageが空欄でなければ送信
+    console.log(post.text)
+    console.log(post.username)
+    if (post.text) {
+
+      const text = post.text
+      // usernameがなければデフォルト名を使用
+      const username = post.username ? post.username : defaultlName
+      const _post = {username: username, text: text}
+
       // POST処理
-      axios.post(apiRootUrl + "/messages/", post)
+      axios.post(apiRootUrl + "/messages/", _post)
       .then(res => {
         console.log(res)
         setMsgs(res.data)
@@ -69,14 +69,11 @@ function App() {
         console.log(error.response.headers);
         console.log('Error', error.message);
       })
+
       // clear message textarea
       inputTextRef.current.value = "";
       setPost({username: post.username, text: ""})
     }
-  }
-
-  const validPost = () => {
-    return ( post.username && post.text )
   }
 
   const clickStart = (e) => {
@@ -157,7 +154,7 @@ function App() {
           <table cellPadding={5}>
             <tr>
               <td>Name:</td>
-              <td><input style={{fontSize:'16px'}} ref={inputNameRef} type="text" value="だるいさん" onChange={handleName} required/></td>
+              <td><input style={{fontSize:'16px'}} ref={inputNameRef} type="text" placeholder={defaultlName} onChange={handleName} required/></td>
             </tr>
             <tr>
               <td valign="middle">Message:</td>
