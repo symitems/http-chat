@@ -121,11 +121,15 @@ function App() {
   return (
     <div style={{
       margin:'auto',
-      width:'50%'
+      width:'70%'
     }}>
       <div style={{
         display:'flex',
-        justifyContent:'space-between'
+        WebkitBoxPack: 'justify',
+        MozBoxPack: 'justify',
+        MsFlexPack: 'justify',
+        WebkitJustifyContent: 'space-between',
+        justifyContent:'space-between',
       }}>
         <div><h1>HTTP CHAT <small><small>by iwsh</small></small></h1></div>
         <div style={{display:'flex', alignItems:'center'}}>
@@ -138,7 +142,11 @@ function App() {
         <table cellPadding={5}>
           <tr>
             <td>Enter API Server URL:</td>
+          </tr>
+          <tr>
             <td><input style={{fontSize:'16px'}} ref={inputInApiRootUrlRef} type="text" onChange={handleInApiRootUrl} required/></td>
+          </tr>
+          <tr>
             <td><button type="submit" onClick={clickStart}><big>Start</big></button></td>
           </tr>
         </table>
@@ -153,7 +161,7 @@ function App() {
             </tr>
             <tr>
               <td valign="middle">Message:</td>
-              <td><textarea style={{fontSize:'16px'}} ref={inputTextRef} cols="40" rows="5" onChange={handleText} required/></td>
+              <td><textarea style={{fontSize:'16px'}} ref={inputTextRef} cols="22" rows="5" onChange={handleText} required/></td>
             </tr>
             <button type="submit" onClick={clickSubmit}><big>Submit</big></button>
           </table>
