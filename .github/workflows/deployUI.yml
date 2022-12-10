@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: start notification
-        id: slack
+        id: slack_start
         uses: slackapi/slack-github-action@v1.22.0
         with:
           payload: |
@@ -48,7 +48,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./ui/build
       - name: complete notification
-        id: slack
+        id: slack_complete
         uses: slackapi/slack-github-action@v1.22.0
         with:
           payload: |
