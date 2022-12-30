@@ -11,11 +11,7 @@ class Msg(BaseModel):
     text: str
 
 
-dbname = 'main.db'
-message_manager = messageManager(dbname)
-
-if not os.path.isfile(dbname):
-    message_manager.create_message_table()
+message_manager = messageManager()
 
 
 app = FastAPI()
@@ -33,7 +29,6 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"UI_ORIGIN": origin}
-    # return {"Hello": "World"}
 
 
 @app.get("/messages/")

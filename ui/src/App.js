@@ -99,8 +99,6 @@ function App() {
       console.log(error.response.headers);
       console.log('Error', error.message);
     })
-    inputNameRef.current.value = "";
-    inputTextRef.current.value = "";
   }
 
   const changeTimezone = (strDate) => {
