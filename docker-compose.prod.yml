@@ -1,0 +1,24 @@
+version: "3"
+services:
+  ui:
+    image: node:16.17.0
+    volumes:
+      - ./ui:/app
+    working_dir: /app
+    command: npm start
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+  api:
+    build:
+      context: ./api
+    volumes:
+      - ./api:/app
+    ports:
+      - "8000:8000"
+    environment:
+      PG_HOST: ${PG_HOST}
+      PG_DATABASE: ${PG_DATABASE}
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
