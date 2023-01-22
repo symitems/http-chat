@@ -1,11 +1,19 @@
 version: "3"
 services:
   ui:
-    image: node:16.17.0
+    build:
+      context: ui
+      dockerfile: develop.Dockerfile
     volumes:
       - ./ui:/app
     working_dir: /app
-    command: npm start
+    command: >
+      sh -c '
+        echo "installing packages..."
+        npm install
+        echo "install completed!"
+        npm start
+      '
     ports:
       - "3000:3000"
     depends_on:
