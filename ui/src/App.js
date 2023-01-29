@@ -9,13 +9,13 @@ const Chat = React.lazy(() => import('./components/Chat'));
 export default function App() {
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
-        <Route path='/http-chat/login' element={<Login />} />
-        <Route path='/http-chat/' element={
-          <PrivateRoute children={<Navigate to='/http-chat/chat' />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/' element={
+          <PrivateRoute children={<Navigate to='/chat' />} />
         } />
-        <Route path='/http-chat/chat' element={
+        <Route path='/chat' element={
           <PrivateRoute children={<Chat />} />
         } />
       </Routes>
