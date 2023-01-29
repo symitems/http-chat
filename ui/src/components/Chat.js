@@ -44,7 +44,7 @@ export default function Chat() {
           setMsgs(res.data);
         })
         .catch((error) => {
-          if (error.response.status == 401) {
+          if (error.response.status === 401) {
             logoutAndNavigateLogin();
           }
         }
