@@ -43,6 +43,9 @@ jobs:
         env:
           REACT_APP_GITHUB_CLIENT_ID: ${{ secrets.OAUTH_GITHUB_CLIENT_ID }}
           REACT_APP_BACKEND_BASEURL: ${{ secrets.BACKEND_BASEURL }}
+      - name: PostBuild
+        # reference: https://dev-yakuza.posstree.com/react/github-pages/#public_url
+        run: cp build/index.html build/404.html
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
