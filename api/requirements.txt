@@ -2,3 +2,5 @@ fastapi
 uvicorn
 pandas
 psycopg2
+pyjwt
+requests

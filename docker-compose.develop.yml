@@ -1,18 +1,29 @@
 version: "3"
 services:
   ui:
-    image: node:16.17.0
+    build:
+      context: ui
+      dockerfile: develop.Dockerfile
     volumes:
       - ./ui:/app
     working_dir: /app
-    command: npm start
+    command: >
+      sh -c '
+        echo "installing packages..."
+        npm install
+        echo "install completed!"
+        npm start
+      '
     ports:
       - "3000:3000"
     depends_on:
       - api
+    environment:
+      - REACT_APP_GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - REACT_APP_BACKEND_BASEURL=http://localhost:8000
   api:
     build:
-      context: ./api
+      context: api
     volumes:
       - ./api:/app
     ports:
@@ -22,12 +33,21 @@ services:
       - PG_DATABASE=postgres
       - PG_USER=postgres
       - PG_PASSWORD=postgres
+      - STAGE=develop
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
     entrypoint:
       - "/usr/local/bin/wait-for-it.sh"
       - "db:5432"
       - "-t"
       - "60"
       - "--"
+    command:
+      - "uvicorn"
+      - "main:app"
+      - "--reload"
+      - "--host"
+      - "0.0.0.0"
     depends_on:
       - db
   db:

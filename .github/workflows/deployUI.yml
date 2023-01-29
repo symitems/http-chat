@@ -4,10 +4,9 @@
 name: deploy_to_github_pages
 
 on:
-  push:
-    branches: ["master"]
   pull_request:
     branches: ["master"]
+    types: ["synchronize"]
 
 jobs:
   build:
@@ -42,6 +41,9 @@ jobs:
           cache-dependency-path: ./ui/package-lock.json
       - run: npm ci
       - run: npm run build
+        env:
+          REACT_APP_GITHUB_CLIENT_ID: ${{ secrets.OAUTH_GITHUB_CLIENT_ID }}
+          REACT_APP_BACKEND_BASEURL: ${{ secrets.BACKEND_BASEURL }}
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
