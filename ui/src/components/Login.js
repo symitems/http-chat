@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { useAuth } from '../context/AuthContext';
 
-axios.defaults.withCredentials = true;
 const backend_baseurl = process.env.REACT_APP_BACKEND_BASEURL
 
 export default function Login() {
@@ -17,6 +16,7 @@ export default function Login() {
   const github_client_id = process.env.REACT_APP_GITHUB_CLIENT_ID
   const github_oauth_url = `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:read`
 
+  axios.defaults.withCredentials = true;
 
   const loginAndNavigate = useCallback(() => {
     login();
