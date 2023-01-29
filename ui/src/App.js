@@ -11,11 +11,11 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/' element={
-          <PrivateRoute children={<Navigate to='/chat' />} />
+        <Route path='/http-chat/login' element={<Login />} />
+        <Route path='/http-chat/' element={
+          <PrivateRoute children={<Navigate to='/http-chat/chat' />} />
         } />
-        <Route path='/chat' element={
+        <Route path='/http-chat/chat' element={
           <PrivateRoute children={<Chat />} />
         } />
       </Routes>

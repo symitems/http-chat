@@ -24,7 +24,7 @@ export default function Login() {
     login();
     // session storageに値が格納されるのを待つため100msスリープ
     setTimeout(() => {
-      navigate("/chat");
+      navigate("/http-chat/chat");
     }, 100)
   }, [login, navigate])
 
