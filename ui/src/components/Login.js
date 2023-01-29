@@ -1,6 +1,6 @@
 import '../App.css';
 import logo from '../logo.svg';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { useAuth } from '../context/AuthContext';
@@ -20,6 +20,14 @@ export default function Login() {
 
   const code = params.startsWith('?code=') ? params.split('=')[1] : undefined;
 
+  const loginAndNavigate = useCallback(() => {
+    login();
+    // session storageに値が格納されるのを待つため100msスリープ
+    setTimeout(() => {
+      navigate("/chat");
+    }, 100)
+  }, [login, navigate])
+
   useEffect(() => {
     if (code) {
       setMessage("Verifying account...")
@@ -35,11 +43,7 @@ export default function Login() {
           console.log(response.data);
           setError("");
           setMessage(response.data.message);
-          login();
-          // session storageに値が格納されるのを待つため100msスリープ
-          setTimeout(() => {
-            navigate("/chat");
-          }, 100)
+          loginAndNavigate();
         })
         .catch(error => {
           // useEffectが2回実行され、片方が401となるのでエラーの表示を遅らせる
@@ -50,7 +54,7 @@ export default function Login() {
           }, 1000)
         });
     }
-  }, [])
+  }, [backend_baseurl, code, loginAndNavigate])
 
 
   return (

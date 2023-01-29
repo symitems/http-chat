@@ -1,5 +1,5 @@
 import '../App.css';
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { useAuth } from '../context/AuthContext';
@@ -20,12 +20,12 @@ export default function Chat() {
   ];
 
   const logout = useAuth().logout;
-  const logoutAndNavigateLogin = () => {
+  const logoutAndNavigateLogin = useCallback(() => {
     logout();
     setTimeout(() => {
       navigate("/login");
     }, 100)
-  }
+  }, [logout, navigate]);
 
 
   const handleText = (event) => {
@@ -51,7 +51,7 @@ export default function Chat() {
         );
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [backend_baseurl, logoutAndNavigateLogin]);
 
   const clickSubmit = () => {
     // messageが空欄でなければ送信
