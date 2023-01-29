@@ -18,6 +18,8 @@ services:
       - "3000:3000"
     depends_on:
       - api
+    env_file:
+      - .env
   api:
     build:
       context: ./api
@@ -25,8 +27,5 @@ services:
       - ./api:/app
     ports:
       - "8000:8000"
-    environment:
-      PG_HOST: ${PG_HOST}
-      PG_DATABASE: ${PG_DATABASE}
-      PG_USER: ${PG_USER}
-      PG_PASSWORD: ${PG_PASSWORD}
+    env_file:
+      - .env
