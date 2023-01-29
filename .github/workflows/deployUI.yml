@@ -1,10 +1,10 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: deploy_to_github_pages
+name: CI-frontend
 
 on:
-  push:
+  pull_request:
     branches: ["master"]
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "*[http-chat-ui]* Start: Frontend deployment"
+              "text": "*[http-chat-ui]* Start: Frontend CI"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -43,21 +43,13 @@ jobs:
         env:
           REACT_APP_GITHUB_CLIENT_ID: ${{ secrets.OAUTH_GITHUB_CLIENT_ID }}
           REACT_APP_BACKEND_BASEURL: ${{ secrets.BACKEND_BASEURL }}
-      - name: PostBuild
-        # reference: https://dev-yakuza.posstree.com/react/github-pages/#public_url
-        run: cp build/index.html build/404.html
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./ui/build
       - name: complete notification
         id: slack_complete
         uses: slackapi/slack-github-action@v1.22.0
         with:
           payload: |
             {
-              "text": "*[http-chat-ui]* Completed: Frontend deployment"
+              "text": "*[http-chat-ui]* Completed: Frontend CI"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
