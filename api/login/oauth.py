@@ -44,7 +44,8 @@ class GithubOauth:
 
             # JWTトークンをcookieとして設定します。
             response.set_cookie(key="access_token", value=token,
-                                httponly=True, secure=use_https)
+                                httponly=True, samesite="None",
+                                secure=use_https)
             return {
                 "message": "login successfully",
                 "username": username,

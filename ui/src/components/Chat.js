@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { useAuth } from '../context/AuthContext';
 
-axios.defaults.withCredentials = true;
 const backend_baseurl = process.env.REACT_APP_BACKEND_BASEURL
 
 export default function Chat() {
@@ -19,6 +18,8 @@ export default function Chat() {
     { value: "UTC", label: "UTC" },
     { value: "JST", label: "JST" },
   ];
+
+  axios.defaults.withCredentials = true;
 
   const logoutAndNavigateLogin = useCallback(() => {
     logout();
