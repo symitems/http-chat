@@ -4,10 +4,9 @@
 name: deploy_to_github_pages
 
 on:
-  push:
-    branches: ["master"]
   pull_request:
     branches: ["master"]
+    types: ["synchronize"]
 
 jobs:
   build:
