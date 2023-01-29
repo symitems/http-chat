@@ -5,10 +5,11 @@ import axios from "axios";
 import { useAuth } from '../context/AuthContext';
 
 axios.defaults.withCredentials = true;
+const backend_baseurl = process.env.REACT_APP_BACKEND_BASEURL
 
 export default function Chat() {
-  const backend_baseurl = process.env.REACT_APP_BACKEND_BASEURL
   const navigate = useNavigate();
+  const logout = useAuth().logout;
   const [msgs, setMsgs] = useState([]);
   const [post, setPost] = useState({});
   const [timezone, setTimezone] = useState();
@@ -19,7 +20,6 @@ export default function Chat() {
     { value: "JST", label: "JST" },
   ];
 
-  const logout = useAuth().logout;
   const logoutAndNavigateLogin = useCallback(() => {
     logout();
     setTimeout(() => {
@@ -51,7 +51,7 @@ export default function Chat() {
         );
     }, 3000);
     return () => clearInterval(interval);
-  }, [backend_baseurl, logoutAndNavigateLogin]);
+  }, [logoutAndNavigateLogin]);
 
   const clickSubmit = () => {
     // messageが空欄でなければ送信

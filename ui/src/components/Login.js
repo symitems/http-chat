@@ -6,19 +6,17 @@ import axios from "axios";
 import { useAuth } from '../context/AuthContext';
 
 axios.defaults.withCredentials = true;
+const backend_baseurl = process.env.REACT_APP_BACKEND_BASEURL
 
 export default function Login() {
   const navigate = useNavigate();
   const login = useAuth().login;
   const [error, setError] = useState("");
 
-  const params = window.location.search;
-  const backend_baseurl = process.env.REACT_APP_BACKEND_BASEURL
   const [message, setMessage] = useState("")
   const github_client_id = process.env.REACT_APP_GITHUB_CLIENT_ID
   const github_oauth_url = `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:read`
 
-  const code = params.startsWith('?code=') ? params.split('=')[1] : undefined;
 
   const loginAndNavigate = useCallback(() => {
     login();
@@ -29,6 +27,8 @@ export default function Login() {
   }, [login, navigate])
 
   useEffect(() => {
+    const params = window.location.search;
+    const code = params.startsWith('?code=') ? params.split('=')[1] : undefined;
     if (code) {
       setMessage("Verifying account...")
       axios.post(backend_baseurl + '/login/oauth/github', {
@@ -54,7 +54,7 @@ export default function Login() {
           }, 1000)
         });
     }
-  }, [backend_baseurl, code, loginAndNavigate])
+  }, [loginAndNavigate])
 
 
   return (
