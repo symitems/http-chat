@@ -23,7 +23,7 @@ export default function Chat() {
   const logoutAndNavigateLogin = useCallback(() => {
     logout();
     setTimeout(() => {
-      navigate("/http-chat/login");
+      navigate("/login");
     }, 100)
   }, [logout, navigate]);
 
