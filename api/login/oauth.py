@@ -8,10 +8,9 @@ import requests
 from config import config
 
 # STAGEがdevelopでない場合、認証CookieをHTTPで利用できないよう制限
+use_https = True
 if config.stage == "develop":
     use_https = False
-else:
-    True
 
 
 class LoginOauthRequest(BaseModel):
