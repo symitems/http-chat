@@ -43,22 +43,14 @@ class GithubOauth:
             token = jwt.encode(payload, self.secret_key, algorithm='HS256')
 
             # JWTトークンをcookieとして設定します。
-            # NOTE: developでsamesite属性を設定すると動かなくなるため暫定対応
-            #       よりよい実装があれば修正してください
-            if config.stage == "develop":
-                response.set_cookie(key="access_token", value=token,
-                                    # httponly=True, samesite="None",
-                                    secure=use_https)
-            else:
-                response.set_cookie(key="access_token", value=token,
-                                    secure=use_https)
-
+            response.set_cookie(key="access_token", value=token,
+                                httponly=True, samesite="None",
+                                secure=use_https)
             return {
                 "message": "login successfully",
                 "username": username,
                 "avatar_url": avatar_url,
             }
-
         except Exception as e:
             print(e)
             raise HTTPException(status_code=401, detail="Invalid code")
