@@ -51,6 +51,7 @@ class GithubOauth:
                                     secure=use_https)
             else:
                 response.set_cookie(key="access_token", value=token,
+                                    httponly=True, samesite="None",
                                     secure=use_https)
 
             return {
