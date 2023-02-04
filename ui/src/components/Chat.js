@@ -102,9 +102,7 @@ export default function Chat() {
     switch (timezone) {
       case "JST":
         strDate = strDate + "Z"
-        const parseDate = Date.parse(strDate.replace(/-/g, "/").replace(/T/, " "));
-        const parsejstdate = parseDate;
-        const jstdate = new Date(parsejstdate);
+        const jstdate = new Date(Date.parse(strDate));
         return (
           [
             jstdate.getFullYear(),
