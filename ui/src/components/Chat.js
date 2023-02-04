@@ -216,7 +216,12 @@ export default function Chat() {
                 borderColor: "#b0e0e6",
               }}
             >
-              {msg.text}
+              {msg.text.split('\n').map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
             </div>
           </div>
         );
