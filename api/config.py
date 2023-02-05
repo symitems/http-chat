@@ -4,7 +4,6 @@ import os
 class Config:
     def __init__(self):
         self.stage = os.getenv("STAGE")
-        self.origin = os.getenv("UI_ORIGIN", default="http://localhost:3000")
         self.secret_key = os.getenv("SECRET", default="my-secret")
         self.client_id = os.getenv("GITHUB_CLIENT_ID")
         self.client_secret = os.getenv("GITHUB_CLIENT_SECRET")
