@@ -2,21 +2,17 @@ import '../App.css';
 import logo from '../logo.svg';
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
-import axios from "axios";
-import { useAuth } from '../context/AuthContext';
+import { login } from '../context/AuthContext';
+import { backend_api } from "../helper/ApiHelper";
 
-const backend_baseurl = process.env.REACT_APP_BACKEND_BASEURL
 
 export default function Login() {
   const navigate = useNavigate();
-  const login = useAuth().login;
   const [error, setError] = useState("");
 
   const [message, setMessage] = useState("")
   const github_client_id = process.env.REACT_APP_GITHUB_CLIENT_ID
   const github_oauth_url = `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:read`
-
-  axios.defaults.withCredentials = true;
 
   const loginAndNavigate = useCallback(() => {
     login();
@@ -24,14 +20,14 @@ export default function Login() {
     setTimeout(() => {
       navigate("/chat");
     }, 100)
-  }, [login, navigate])
+  }, [navigate])
 
   useEffect(() => {
     const params = window.location.search;
     const code = params.startsWith('?code=') ? params.split('=')[1] : undefined;
     if (code) {
       setMessage("Verifying account...")
-      axios.post(backend_baseurl + '/login/oauth/github', {
+      backend_api.post('/login/oauth/github', {
         code: code
       }, {
         headers: {

@@ -1,14 +1,11 @@
 import '../App.css';
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
-import axios from "axios";
-import { useAuth } from '../context/AuthContext';
-
-const backend_baseurl = process.env.REACT_APP_BACKEND_BASEURL
+import { logout } from '../context/AuthContext';
+import { backend_api } from "../helper/ApiHelper";
 
 export default function Chat() {
   const navigate = useNavigate();
-  const logout = useAuth().logout;
   const [msgs, setMsgs] = useState([]);
   const [post, setPost] = useState({});
   const [timezone, setTimezone] = useState();
@@ -19,14 +16,13 @@ export default function Chat() {
     { value: "JST", label: "JST" },
   ];
 
-  axios.defaults.withCredentials = true;
 
   const logoutAndNavigateLogin = useCallback(() => {
     logout();
     setTimeout(() => {
       navigate("/login");
     }, 100)
-  }, [logout, navigate]);
+  }, [navigate]);
 
 
   const handleText = (event) => {
@@ -39,7 +35,7 @@ export default function Chat() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      axios.get(backend_baseurl + "/messages/")
+      backend_api.get("/messages/")
         .then((res) => {
           console.log(res);
           setMsgs(res.data);
@@ -63,8 +59,7 @@ export default function Chat() {
       const _post = { text: text };
 
       // POST処理
-      axios
-        .post(backend_baseurl + "/messages/", _post)
+      backend_api.post("/messages/", _post)
         .then((res) => {
           console.log(res);
           setMsgs(res.data);
@@ -84,8 +79,7 @@ export default function Chat() {
 
   const clickClear = () => {
     // DELETE処理
-    axios
-      .delete(backend_baseurl + "/messages/")
+    backend_api.delete("/messages/")
       .then((res) => {
         console.log(res);
         setMsgs(res.data);
