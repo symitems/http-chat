@@ -6,6 +6,7 @@ import jwt
 import requests
 
 from config import config
+from logger import logger
 
 # STAGEがdevelopでない場合、認証CookieをHTTPで利用できないよう制限
 use_https = True
@@ -61,7 +62,7 @@ class GithubOauth:
             }
 
         except Exception as e:
-            print(e)
+            logger.error(e)
             raise HTTPException(status_code=401, detail="Invalid code")
 
     def getToken(self, code: str) -> str:
@@ -75,6 +76,13 @@ class GithubOauth:
 
         response = requests.post(
             self.url_token, headers=headers, json=data).json()
+
+        if "access_token" not in response:
+            logger.info("Login request is invalid")
+            logger.info(f"response: {response}")
+            raise Exception(
+                'There is no "access_token" in response from Github')
+
         return response["access_token"]
 
     def getUser(self, token: str) -> str:
