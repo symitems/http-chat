@@ -115,6 +115,13 @@ export default function Chat() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    // cmd + Enter もしくは ctrl + Enter
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      clickSubmit()
+    }
+  }
+
   return (
     <div
       style={{
@@ -170,6 +177,7 @@ export default function Chat() {
                   cols="22"
                   rows="5"
                   onChange={handleText}
+                  onKeyDown={handleKeyDown}
                   required
                 />
               </td>
