@@ -7,6 +7,7 @@ import requests
 
 from config import config
 from logger import logger
+from .user_manager import user_manager
 
 # STAGEがdevelopでない場合、認証CookieをHTTPで利用できないよう制限
 use_https = True
@@ -21,6 +22,7 @@ class LoginOauthRequest(BaseModel):
 class GithubOauth:
     def __init__(self):
         self.router = APIRouter()
+        self.provider = "github"
         self.url_user = "https://api.github.com/user"
         self.url_token = "https://github.com/login/oauth/access_token"
         self.client_id = config.client_id
@@ -35,10 +37,15 @@ class GithubOauth:
         try:
             token = self.getToken(code)
             user = self.getUser(token)
-            username, avatar_url = user["login"], user["avatar_url"]
+            logger.debug(user)
+            github_id = str(user["id"])
+            username = user["login"]
+            avatar_url = user["avatar_url"]
+            user_manager.update_userinfo(
+                self.provider, github_id, username, avatar_url)
 
             payload = {
-                "sub": username + " @ Github",
+                "sub": username,
                 "exp": datetime.utcnow() + timedelta(hours=1),
             }
             token = jwt.encode(payload, self.secret_key, algorithm='HS256')

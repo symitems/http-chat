@@ -1,10 +1,8 @@
 from fastapi import Depends, APIRouter
 from pydantic import BaseModel
 
-from .message_manager import MessageManager
+from .message_manager import message_manager
 from helper.auth_helper import get_current_user
-
-message_manager = MessageManager()
 
 
 class Msg(BaseModel):
