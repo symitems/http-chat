@@ -1,5 +1,5 @@
 # Regression test
-- Login and redirect to /chat/
+- Login with both Github and Google and redirect to /chat/
 - Submit message
 - Clear all message
 - Display datetime both UTC and JST
