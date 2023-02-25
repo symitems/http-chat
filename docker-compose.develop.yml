@@ -20,6 +20,7 @@ services:
       - api
     environment:
       - REACT_APP_GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - REACT_APP_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - REACT_APP_BACKEND_BASEURL=http://api:8000
   api:
     build:
@@ -34,6 +35,8 @@ services:
       - STAGE=develop
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
       - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
     entrypoint:
       - "/usr/local/bin/wait-for-it.sh"
       - "db:5432"
