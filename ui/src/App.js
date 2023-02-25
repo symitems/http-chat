@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Route, Navigate, Routes, BrowserRouter } from 'react-router-dom';
-import { is_authenticated } from './context/AuthContext';
+import { is_authenticated } from './contexts/AuthContext';
 
-const Login = React.lazy(() => import('./components/Login'));
-const Chat = React.lazy(() => import('./components/Chat'));
+const Login = React.lazy(() => import('./pages/Login'));
+const Chat = React.lazy(() => import('./pages/Chat'));
 
 export default function App() {
 

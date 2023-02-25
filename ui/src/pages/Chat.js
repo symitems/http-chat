@@ -1,7 +1,7 @@
 import '../App.css';
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
-import { logout } from '../context/AuthContext';
+import { logout } from '../contexts/AuthContext';
 import { backend_api } from "../helper/ApiHelper";
 
 export default function Chat() {
