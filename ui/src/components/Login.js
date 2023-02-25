@@ -14,7 +14,8 @@ export default function Login() {
   const github_client_id = process.env.REACT_APP_GITHUB_CLIENT_ID
   const github_oauth_url = `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:read`
   const google_client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID
-  const google_oauth_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_client_id}&redirect_uri=http%3A//localhost%3A3000/login&response_type=code&access_type=offline&scope=openid%20https%3A//www.googleapis.com/auth/userinfo.email%20https%3A//www.googleapis.com/auth/userinfo.profile`
+  const origin = window.location.origin
+  const google_oauth_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_client_id}&redirect_uri=${origin}/login&response_type=code&access_type=offline&scope=openid%20https%3A//www.googleapis.com/auth/userinfo.email%20https%3A//www.googleapis.com/auth/userinfo.profile`
 
   const loginAndNavigate = useCallback(() => {
     login();

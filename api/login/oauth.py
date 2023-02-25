@@ -97,6 +97,7 @@ class GoogleOauth:
         self.client_id = config.google_client_id
         self.client_secret = config.google_client_secret
         self.secret_key = config.secret_key
+        self.ui_origin = config.ui_origin
         self.router.add_api_route(
             "/login/oauth/google", self.login, methods=["POST"])
 
@@ -133,7 +134,7 @@ class GoogleOauth:
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         data = (f"code={code}&client_id={self.client_id}"
                 f"&client_secret={self.client_secret}"
-                "&redirect_uri=http://localhost:3000/login"
+                f"&redirect_uri={self.ui_origin}/login"
                 "&grant_type=authorization_code")
 
         response = requests.post(
