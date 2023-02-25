@@ -80,7 +80,7 @@ class GithubOauth:
 
     def getUser(self, token: str) -> str:
         headers = {
-            "Authorization": "Bearer {}".format(token),
+            "Authorization": f"Bearer {token}",
             "Accept": "application/vnd.github+json",
             "X-GitHub-Api-Version": "2022-11-28",
         }
@@ -131,10 +131,10 @@ class GoogleOauth:
 
     def getToken(self, code: str) -> str:
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
-        data = (f'code={code}&client_id={self.client_id}'
-                f'&client_secret={self.client_secret}'
-                '&redirect_uri=http://localhost:3000/login'
-                '&grant_type=authorization_code')
+        data = (f"code={code}&client_id={self.client_id}"
+                f"&client_secret={self.client_secret}"
+                "&redirect_uri=http://localhost:3000/login"
+                "&grant_type=authorization_code")
 
         response = requests.post(
             self.url_token, headers=headers, data=data).json()
@@ -149,7 +149,7 @@ class GoogleOauth:
 
     def getUser(self, token: str) -> str:
         headers = {
-            "Authorization": "Bearer {}".format(token)
+            "Authorization": f"Bearer {token}"
         }
 
         response = requests.get(self.url_user, headers=headers).json()

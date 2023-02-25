@@ -27,34 +27,13 @@ export default function Login() {
   useEffect(() => {
     const params = window.location.search;
     const code = params.startsWith('?code=') ? params.split('=')[1] : undefined;
-    const google = 'google'
-    if (code && params.indexOf(google) === -1) {
-      setMessage("Verifying github account...")
-      backend_api.post('/login/oauth/github', {
-        code: code
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      })
-        .then(response => {
-          console.log(response.data);
-          setError("");
-          setMessage(response.data.message);
-          loginAndNavigate();
-        })
-        .catch(error => {
-          // useEffectが2回実行され、片方が401となるのでエラーの表示を遅らせる
-          setTimeout(() => {
-            setError("Cannot login. Try again.");
-            setMessage("");
-            console.log(error);
-          }, 1000)
-        });
-    } else if (code && params.indexOf(google) !== -1) {
-      setMessage("Verifying google account...")
-      backend_api.post('/login/oauth/google', {
+    if (code) {
+      let service_name = 'github';
+      if (params.indexOf('google') !== -1) {
+        service_name = 'google';
+      }
+      setMessage(`Verifying ${service_name} account...`)
+      backend_api.post(`/login/oauth/${service_name}`, {
         code: code
       }, {
         headers: {
