@@ -15,4 +15,4 @@ RUN chmod +x /usr/local/bin/wait-for-it.sh
 
 
 COPY . .
-CMD [ "uvicorn", "main:app", "--reload", "--host", "0.0.0.0" ]
+CMD [ "uvicorn", "main:app", "--host", "0.0.0.0" ]
