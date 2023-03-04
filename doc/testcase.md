@@ -5,4 +5,6 @@
 - Display datetime both UTC and JST
 - Logout successfully
 - Check if you cannnot see chat page without login
-- Check 401 Unauthorized error when you see chat page with invalid code paramater
+- When visiting chat page with invalid code paramater, you can see
+  - Modal window with error message
+  - 401 error in console of the developer tool of your browser
