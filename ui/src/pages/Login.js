@@ -13,6 +13,10 @@ export default function Login() {
   const [message, setMessage] = useState("")
   const github_client_id = process.env.REACT_APP_GITHUB_CLIENT_ID
   const github_oauth_url = `https://github.com/login/oauth/authorize?client_id=${github_client_id}&scope=user:read`
+  const google_client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID
+  const origin = window.location.origin
+  const google_oauth_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_client_id}&redirect_uri=${origin}/login&response_type=code&access_type=offline&scope=openid%20https%3A//www.googleapis.com/auth/userinfo.email%20https%3A//www.googleapis.com/auth/userinfo.profile`
+
   const setModalIsShown = useContext(ModalContext).isModalShown[1];
   const setmodalTitle = useContext(ModalContext).modalTitle[1];
   const setModalMessage = useContext(ModalContext).modalMessage[1];
@@ -32,8 +36,12 @@ export default function Login() {
     const params = window.location.search;
     const code = params.startsWith('?code=') ? params.split('=')[1] : undefined;
     if (code) {
-      setMessage("Verifying account...")
-      backend_api.post('/login/oauth/github', {
+      let service_name = 'github';
+      if (params.indexOf('google') !== -1) {
+        service_name = 'google';
+      }
+      setMessage(`Verifying ${service_name} account...`)
+      backend_api.post(`/login/oauth/${service_name}`, {
         code: code
       }, {
         headers: {
@@ -84,6 +92,12 @@ export default function Login() {
           href={github_oauth_url}
         >
           LOGIN with Github
+        </a>
+        <a
+          className='App-link'
+          href={google_oauth_url}
+        >
+          LOGIN with Google
         </a>
       </header>
     </div>
