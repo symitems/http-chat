@@ -8,3 +8,4 @@
 - When visiting chat page with invalid code paramater, you can see
   - Modal window with error message
   - 401 error in console of the developer tool of your browser
+- Confirm that new messages go to the top

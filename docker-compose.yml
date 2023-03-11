@@ -33,6 +33,7 @@ services:
       - PG_USER=postgres
       - PG_PASSWORD=postgres
       - STAGE=develop
+      - LOG_LEVEL=DEBUG
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
       - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
