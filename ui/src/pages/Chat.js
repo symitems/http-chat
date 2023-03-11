@@ -1,8 +1,9 @@
 import '../App.css';
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
 import { useNavigate } from "react-router";
-import { logout } from '../context/AuthContext';
+import { logout } from '../contexts/AuthContext';
 import { backend_api } from "../helper/ApiHelper";
+import ModalContext from '../contexts/ModalContext';
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -11,11 +12,13 @@ export default function Chat() {
   const [timezone, setTimezone] = useState();
   const inputTextRef = useRef();
   const inputTimezoneRef = useRef();
+  const setModalIsShown = useContext(ModalContext).isModalShown[1];
+  const setmodalTitle = useContext(ModalContext).modalTitle[1];
+  const setModalMessage = useContext(ModalContext).modalMessage[1];
   const tzlist = [
     { value: "UTC", label: "UTC" },
     { value: "JST", label: "JST" },
   ];
-
 
   const logoutAndNavigateLogin = useCallback(() => {
     logout();
@@ -42,13 +45,16 @@ export default function Chat() {
         })
         .catch((error) => {
           if (error.response.status === 401) {
+            setModalIsShown(true);
+            setmodalTitle("Logout");
+            setModalMessage("Authentication expired. Login again.");
             logoutAndNavigateLogin();
           }
         }
         );
     }, 3000);
     return () => clearInterval(interval);
-  }, [logoutAndNavigateLogin]);
+  }, [logoutAndNavigateLogin, setModalIsShown, setmodalTitle, setModalMessage]);
 
   const clickSubmit = () => {
     // messageが空欄でなければ送信

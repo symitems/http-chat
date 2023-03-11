@@ -8,8 +8,11 @@ class Config:
         self.stage = os.getenv("STAGE")
         self.log_level = os.getenv("LOG_LEVEL", default="INFO")
         self.secret_key = os.getenv("SECRET", default="my-secret")
-        self.client_id = os.getenv("GITHUB_CLIENT_ID")
-        self.client_secret = os.getenv("GITHUB_CLIENT_SECRET")
+        self.github_client_id = os.getenv("GITHUB_CLIENT_ID")
+        self.github_client_secret = os.getenv("GITHUB_CLIENT_SECRET")
+        self.google_client_id = os.getenv("GOOGLE_CLIENT_ID")
+        self.google_client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
+        self.ui_origin = os.getenv("UI_ORIGIN")
 
         if os.getenv("PG_HOST"):
             self.db_type = "postgresql"

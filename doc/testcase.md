@@ -1,7 +1,10 @@
 # Regression test
-- Login and redirect to /chat/
+- Login with both Github and Google and redirect to /chat
 - Submit message
 - Clear all message
 - Display datetime both UTC and JST
 - Logout successfully
-- Check if you cannnot chat page without login and see 401 Unauthorized error
+- Check if you cannnot see chat page without login
+- When visiting chat page with invalid code paramater, you can see
+  - Modal window with error message
+  - 401 error in console of the developer tool of your browser
