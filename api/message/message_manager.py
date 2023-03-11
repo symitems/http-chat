@@ -36,10 +36,9 @@ class MessageManager:
         return self.get_messages()
 
     def delete_messages(self):
-        query = Message.delete()
-
-        with engine.connect() as conn:
-            conn.execute(query)
+        with Session(engine) as session:
+            session.query(Message).delete()
+            session.commit()
 
         return self.get_messages()
 

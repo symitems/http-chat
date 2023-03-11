@@ -1,14 +1,8 @@
 from datetime import datetime
-from typing_extensions import Annotated
-from sqlalchemy import func, ForeignKey, Integer, Text, TIMESTAMP
+from sqlalchemy import func, ForeignKey, Integer, Text, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .base import Base
-
-timestamp = Annotated[
-    datetime,
-    mapped_column(nullable=False, server_default=func.CURRENT_TIMESTAMP()),
-]
 
 
 class Message(Base):
@@ -17,8 +11,7 @@ class Message(Base):
         Integer, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     text: Mapped[str] = mapped_column(Text)
-    created_at: Mapped[timestamp] = mapped_column(
-        TIMESTAMP, server_default='now()')
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())
 
     def __repr__(self) -> str:
         return "Message(" \

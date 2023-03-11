@@ -1,11 +1,12 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from models import engine, User, SocialAccountGithub
+from models import engine, User, SocialAccountGithub, SocialAccountGoogle
 from logger import logger
 
 social_account_tables = {
     "github": SocialAccountGithub,
+    "google": SocialAccountGoogle,
 }
 
 

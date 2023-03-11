@@ -39,7 +39,7 @@ class GithubOauth:
             user = self.getUser(token)
             logger.debug(user)
             github_id = str(user["id"])
-            username = user["login"]
+            username = f"{user['login']} @ Github"
             avatar_url = user["avatar_url"]
             user_manager.update_userinfo(
                 self.provider, github_id, username, avatar_url)
@@ -99,6 +99,7 @@ class GithubOauth:
 class GoogleOauth:
     def __init__(self):
         self.router = APIRouter()
+        self.provider = "google"
         self.url_user = "https://www.googleapis.com/oauth2/v1/userinfo"
         self.url_token = "https://oauth2.googleapis.com/token"
         self.client_id = config.google_client_id
@@ -114,10 +115,15 @@ class GoogleOauth:
         try:
             token = self.getToken(code)
             user = self.getUser(token)
-            username, avatar_url = user["name"], user["picture"]
+            logger.debug(user)
+            google_id = str(user["id"])
+            username = f"{user['name']} @ Google"
+            avatar_url = user["picture"]
+            user_manager.update_userinfo(
+                self.provider, google_id, username, avatar_url)
 
             payload = {
-                "sub": username + " @ Google",
+                "sub": username,
                 "exp": datetime.utcnow() + timedelta(hours=1),
             }
             token = jwt.encode(payload, self.secret_key, algorithm='HS256')
