@@ -23,11 +23,7 @@ Simple chat application consisting of frontend UI and backend API communicating 
 
 1. Build images and start containers
     ```
-    # Use external database
-    docker compose -f docker-compose.prod.yml up
-
-    # Use database on docker
-    docker compose -f docker-compose.develop.yml up
+    docker compose up
     ```
 
 1. Access to http://localhost:3000

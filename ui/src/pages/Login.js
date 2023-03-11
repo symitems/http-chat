@@ -1,14 +1,14 @@
 import '../App.css';
 import logo from '../logo.svg';
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext, useRef } from "react";
 import { useNavigate } from "react-router";
-import { login } from '../context/AuthContext';
+import { login } from '../contexts/AuthContext';
 import { backend_api } from "../helper/ApiHelper";
+import ModalContext from '../contexts/ModalContext';
 
 
 export default function Login() {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
 
   const [message, setMessage] = useState("")
   const github_client_id = process.env.REACT_APP_GITHUB_CLIENT_ID
@@ -16,6 +16,13 @@ export default function Login() {
   const google_client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID
   const origin = window.location.origin
   const google_oauth_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_client_id}&redirect_uri=${origin}/login&response_type=code&access_type=offline&scope=openid%20https%3A//www.googleapis.com/auth/userinfo.email%20https%3A//www.googleapis.com/auth/userinfo.profile`
+
+  const setModalIsShown = useContext(ModalContext).isModalShown[1];
+  const setmodalTitle = useContext(ModalContext).modalTitle[1];
+  const setModalMessage = useContext(ModalContext).modalMessage[1];
+
+  // For develop environment with strictmode
+  const refFirstRef = useRef(true);
 
   const loginAndNavigate = useCallback(() => {
     login();
@@ -44,20 +51,29 @@ export default function Login() {
       })
         .then(response => {
           console.log(response.data);
-          setError("");
           setMessage(response.data.message);
           loginAndNavigate();
         })
         .catch(error => {
-          // useEffectが2回実行され、片方が401となるのでエラーの表示を遅らせる
-          setTimeout(() => {
-            setError("Cannot login. Try again.");
-            setMessage("");
-            console.log(error);
-          }, 1000)
+          console.error(error);
+          // NOTE: When StrictMode is enabled, React intentionally performs
+          //       operations twice in devlopment. Login request is also
+          //       excuted twice though code is valid only once. We must ignore
+          //       first login error because one of the two responces is always error.
+          if (process.env.NODE_ENV === "development") {
+            if (refFirstRef.current) {
+              refFirstRef.current = false;
+              console.error("if");
+              return;
+            }
+          }
+          setModalIsShown(true);
+          setmodalTitle("Login Error");
+          setModalMessage("Cannot login. Try again.");
+          setMessage("");
         });
     }
-  }, [loginAndNavigate])
+  }, [loginAndNavigate, setModalIsShown, setmodalTitle, setModalMessage])
 
 
   return (
@@ -83,13 +99,6 @@ export default function Login() {
         >
           LOGIN with Google
         </a>
-        {
-          error ?
-            <div style={{ color: "lightsalmon" }}>
-              {error}
-            </div>
-            : null
-        }
       </header>
     </div>
   );
