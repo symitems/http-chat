@@ -11,6 +11,7 @@ export default function Chat() {
   const navigate = useNavigate();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [msgs, setMsgs] = useState([]);
+  const [isErr, setIsErr] = useState(false);
   const [post, setPost] = useState({});
   const [timezone, setTimezone] = useState();
   const inputTextRef = useRef();
@@ -30,7 +31,6 @@ export default function Chat() {
     }, 100)
   }, [navigate]);
 
-
   const handleText = (event) => {
     setPost({ text: event.target.value });
   };
@@ -39,35 +39,45 @@ export default function Chat() {
     setTimezone(event.target.value);
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      backend_api.get("/messages/")
-        .then((res) => {
-          console.log(res);
-          setMsgs(res.data);
-          setIsAuthorized(true)
-        })
-        .catch((error) => {
-          if (error.response.status === 401) {
-            setModalIsShown(true);
-            setmodalTitle("Logout");
-            setModalMessage("Authentication expired. Login again.");
-            logoutAndNavigateLogin();
-            clearInterval(interval);
-          } else if (error.response.status === 403) {
-            setModalIsShown(true);
-            setmodalTitle("Account is NOT active");
-            setModalMessage("Please ask the site administrator to activate your account");
-            clearInterval(interval);
-          } else {
-            setModalIsShown(true);
-            setmodalTitle("Error");
-            clearInterval(interval);
-          }
+  const getMessage = useCallback(() => {
+    backend_api.get("/messages/")
+      .then((res) => {
+        console.log(res);
+        setMsgs(res.data);
+        setIsAuthorized(true);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setModalIsShown(true);
+          setmodalTitle("Logout");
+          setModalMessage("Authentication expired. Login again.");
+          logoutAndNavigateLogin();
+          isErr || setIsErr(true);
+        } else if (error.response.status === 403) {
+          setModalIsShown(true);
+          setmodalTitle("Account is NOT active");
+          setModalMessage("Please ask the administrator to activate your account");
+          isErr || setIsErr(true);
+        } else {
+          setModalIsShown(true);
+          setmodalTitle("Sorry!!");
+          setModalMessage("An error occurred in the application. Please contact the administrator to resolve the issue.");
+          isErr || setIsErr(true);
         }
-        );
-    }, 3000);
-  }, [logoutAndNavigateLogin, setModalIsShown, setmodalTitle, setModalMessage]);
+      }
+      );
+  }, [logoutAndNavigateLogin, setModalIsShown, setmodalTitle, setModalMessage, isErr, setIsErr])
+
+  useEffect(() => {
+    getMessage()
+    const interval = setInterval((isErr) => {
+      if (isErr) {
+        clearInterval(interval);
+        return
+      }
+      getMessage()
+    }, 3000, [isErr]);
+  }, [getMessage, isErr]);
 
   const clickSubmit = () => {
     // messageが空欄でなければ送信

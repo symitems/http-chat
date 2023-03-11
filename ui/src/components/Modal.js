@@ -20,7 +20,7 @@ const NotificationModal = () => {
                     {modalTitle}
                 </DialogTitle>
                 <DialogContent>
-                    <Typography variant="h5">
+                    <Typography variant="h6">
                         {modalMessage}
                     </Typography>
                 </DialogContent>

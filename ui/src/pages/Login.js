@@ -63,7 +63,6 @@ export default function Login() {
           if (process.env.NODE_ENV === "development") {
             if (refFirstRef.current) {
               refFirstRef.current = false;
-              console.error("if");
               return;
             }
           }
