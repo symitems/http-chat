@@ -1,5 +1,5 @@
 from typing import List, Optional
-from sqlalchemy import ForeignKey, String, Text
+from sqlalchemy import ForeignKey, String, Text, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
@@ -13,6 +13,7 @@ class User(Base):
     username: Mapped[str] = mapped_column(
         String(30), nullable=False, unique=True)
     avatar_url: Mapped[str] = mapped_column(Text)
+    is_active: Mapped[str] = mapped_column(Boolean, default=False)
     social_account_github: Mapped[Optional["SocialAccountGithub"]] = \
         relationship(back_populates="user")
     social_account_google: Mapped[Optional["SocialAccountGoogle"]] = \

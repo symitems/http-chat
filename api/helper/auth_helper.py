@@ -5,6 +5,7 @@ from fastapi import HTTPException, Request
 from config import config
 
 
+# TODO: user_idをpayloadに含め、認証にはidを使用する
 def get_current_user(request: Request):
     access_token = request.cookies.get("access_token")
     if access_token is not None:

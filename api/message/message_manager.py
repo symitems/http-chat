@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 import pandas as pd
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -7,8 +8,19 @@ from login.user_manager import user_manager
 
 
 class MessageManager:
+    def authorize(self, current_user: str):
+        with Session(engine) as session:
+            user_selected = session.query(User).filter(
+                User.username == current_user).first()
+        if user_selected:
+            if user_selected.is_active:
+                return
+        raise HTTPException(
+            status_code=403,
+            detail=f"Access Denied: {current_user} not activated"
+        )
+
     def get_messages(self):
-        # TODO: Usernameとの紐づけ
         query = (
             select(User.username, Message.text, Message.created_at)
             .join(Message, Message.user_id == User.id)

@@ -44,6 +44,7 @@ class GithubOauth:
             user_manager.update_userinfo(
                 self.provider, github_id, username, avatar_url)
 
+            # TODO: user_idをpayloadに含め、認証にはidを使用する
             payload = {
                 "sub": username,
                 "exp": datetime.utcnow() + timedelta(hours=1),
@@ -122,6 +123,7 @@ class GoogleOauth:
             user_manager.update_userinfo(
                 self.provider, google_id, username, avatar_url)
 
+            # TODO: user_idをpayloadに含め、認証にはidを使用する
             payload = {
                 "sub": username,
                 "exp": datetime.utcnow() + timedelta(hours=1),
