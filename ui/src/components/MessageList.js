@@ -7,6 +7,10 @@ export default function MessageList(props) {
                 marginTop: 15,
             }}>
                 <b>
+                    <img src={props.msg.avatar_url} alt="画像はありません" style={{
+                        width: "20px",
+                        height: "auto",
+                        }} />{" "}
                     <big>{props.msg.username}</big>
                 </b>{" "}
                 <small> - [ {props.changeTimezone(props.msg.created_at)} ]</small>
