@@ -1,6 +1,6 @@
 import os
 
-db_url_template = "{dialect}://{username}:{password}@{host}:{port}/{database}"
+DB_URL_FORMAT = "{dialect}://{username}:{password}@{host}:{port}/{database}"
 
 
 class Config:
@@ -24,7 +24,7 @@ class Config:
                 "username": os.getenv("PG_USER"),
                 "password": os.getenv("PG_PASSWORD"),
             }
-            self.db_url = db_url_template.format_map(db_conf)
+            self.db_url = DB_URL_FORMAT.format_map(db_conf)
 
         elif os.getenv("MYSQL_HOST"):
             self.db_type = "mysql"
@@ -36,7 +36,7 @@ class Config:
                 "username": os.getenv("MYSQL_USER"),
                 "password": os.getenv("MYSQL_PASSWORD"),
             }
-            self.db_url = db_url_template.format_map(db_conf)
+            self.db_url = DB_URL_FORMAT.format_map(db_conf)
 
         else:
             self.db_type = "sqlite"
