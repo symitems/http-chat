@@ -4,10 +4,14 @@ import { useNavigate } from "react-router";
 import { logout } from '../contexts/AuthContext';
 import { backend_api } from "../helper/ApiHelper";
 import ModalContext from '../contexts/ModalContext';
+import MessageForm from '../components/MessageForm';
+import MessageList from '../components/MessageList';
 
 export default function Chat() {
   const navigate = useNavigate();
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [msgs, setMsgs] = useState([]);
+  const [isErr, setIsErr] = useState(false);
   const [post, setPost] = useState({});
   const [timezone, setTimezone] = useState();
   const inputTextRef = useRef();
@@ -27,7 +31,6 @@ export default function Chat() {
     }, 100)
   }, [navigate]);
 
-
   const handleText = (event) => {
     setPost({ text: event.target.value });
   };
@@ -36,25 +39,45 @@ export default function Chat() {
     setTimezone(event.target.value);
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      backend_api.get("/messages/")
-        .then((res) => {
-          console.log(res);
-          setMsgs(res.data);
-        })
-        .catch((error) => {
-          if (error.response.status === 401) {
-            setModalIsShown(true);
-            setmodalTitle("Logout");
-            setModalMessage("Authentication expired. Login again.");
-            logoutAndNavigateLogin();
-          }
+  const getMessage = useCallback(() => {
+    backend_api.get("/messages/")
+      .then((res) => {
+        console.log(res);
+        setMsgs(res.data);
+        setIsAuthorized(true);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setModalIsShown(true);
+          setmodalTitle("Logout");
+          setModalMessage("Authentication expired. Login again.");
+          logoutAndNavigateLogin();
+          isErr || setIsErr(true);
+        } else if (error.response.status === 403) {
+          setModalIsShown(true);
+          setmodalTitle("Account is NOT active");
+          setModalMessage("Please ask the administrator to activate your account");
+          isErr || setIsErr(true);
+        } else {
+          setModalIsShown(true);
+          setmodalTitle("Sorry!!");
+          setModalMessage("An error occurred in the application. Please contact the administrator to resolve the issue.");
+          isErr || setIsErr(true);
         }
-        );
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [logoutAndNavigateLogin, setModalIsShown, setmodalTitle, setModalMessage]);
+      }
+      );
+  }, [logoutAndNavigateLogin, setModalIsShown, setmodalTitle, setModalMessage, isErr, setIsErr])
+
+  useEffect(() => {
+    getMessage()
+    const interval = setInterval((isErr) => {
+      if (isErr) {
+        clearInterval(interval);
+        return
+      }
+      getMessage()
+    }, 3000, [isErr]);
+  }, [getMessage, isErr]);
 
   const clickSubmit = () => {
     // messageが空欄でなければ送信
@@ -171,67 +194,20 @@ export default function Chat() {
         </div>
       </div>
       <hr></hr>
-      <div>
-        <table cellPadding={5}>
-          <tbody>
-            <tr>
-              <td valign="middle">Message:</td>
-              <td>
-                <textarea
-                  style={{ fontSize: "16px" }}
-                  ref={inputTextRef}
-                  cols="22"
-                  rows="5"
-                  onChange={handleText}
-                  onKeyDown={handleKeyDown}
-                  required
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button type="submit" onClick={clickSubmit}>
-          <big>Submit</big>
-        </button>
-        <hr></hr>
-      </div>
-      <button type="submit" onClick={clickClear}>
-        <big>Clear All</big>
-      </button>
-      {msgs.map((msg) => {
+      {
+        isAuthorized && (
+          <MessageForm
+            ref={inputTextRef}
+            onChange={handleText}
+            onKeyDown={handleKeyDown}
+            onClickSubmit={clickSubmit}
+            onClickClearAll={clickClear}
+          />
+        )
+      }
+      {msgs.map((msg, index) => {
         return (
-          <div>
-            <div style={{
-              marginTop: 15,
-            }}>
-              <b>
-                <big>{msg.username}</big>
-              </b>{" "}
-              <small> - [ {changeTimezone(msg.created_at)} ]</small>
-            </div>
-            <div
-              style={{
-                backgroundColor: "#ffffff",
-                padding: 5,
-                marginLeft: "1%",
-                marginTop: 5,
-                marginRight: "5%",
-                // maxWidth: '50%',
-                alignSelf: "flex-end",
-                borderRadius: 15,
-                display: "inline-block",
-                border: "1.5px solid",
-                borderColor: "#b0e0e6",
-              }}
-            >
-              {msg.text.split('\n').map((line, i) => (
-                <React.Fragment key={i}>
-                  {line}
-                  <br />
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
+          <MessageList msg={msg} changeTimezone={changeTimezone} key={index} />
         );
       })}
     </div>
