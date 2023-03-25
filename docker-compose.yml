@@ -51,8 +51,6 @@ services:
       - "--reload"
       - "--host"
       - "0.0.0.0"
-      - "--port"
-      - "8000"
     depends_on:
       - db
   db:
