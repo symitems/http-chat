@@ -122,10 +122,10 @@ export default function Chat() {
   };
 
   const changeTimezone = (strDate) => {
+    strDate = strDate + "Z"
+    const jstdate = new Date(Date.parse(strDate));
     switch (timezone) {
       case "JST":
-        strDate = strDate + "Z"
-        const jstdate = new Date(Date.parse(strDate));
         return (
           [
             jstdate.getFullYear(),
@@ -140,7 +140,19 @@ export default function Chat() {
           ].join(":")
         );
       default:
-        return strDate;
+        return (
+          [
+            jstdate.getUTCFullYear(),
+            ("0" + (jstdate.getUTCMonth() + 1)).slice(-2),
+            ("0" + jstdate.getUTCDate()).slice(-2),
+          ].join("-") +
+          " " +
+          [
+            ("0" + jstdate.getUTCHours()).slice(-2),
+            ("0" + jstdate.getUTCMinutes()).slice(-2),
+            ("0" + jstdate.getUTCSeconds()).slice(-2),
+          ].join(":")
+        );
     }
   };
 
