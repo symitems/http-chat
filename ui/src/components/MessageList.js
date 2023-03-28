@@ -7,16 +7,16 @@ export default function MessageList(props) {
                 <tbody>
                     <tr>
                         <td rowSpan={2} valign="top">
-                            <img
+                            <span style={{ fontSize: "10px" }}><img
                                 src={props.msg.avatar_url}
-                                alt="画像はありません"
+                                alt="img"
                                 style={{
                                     borderRadius: 50,
                                     marginTop: 15,
                                     width: "30px",
                                     height: "auto",
                                 }}
-                            />
+                            /></span>
                         </td>
                         <td style={{ whiteSpace: "nowrap" }}>
                             <b style={{ marginLeft: "1%" }}>{props.msg.username}</b>
