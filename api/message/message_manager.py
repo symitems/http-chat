@@ -22,7 +22,8 @@ class MessageManager:
 
     def get_messages(self):
         query = (
-            select(User.username, Message.text, Message.created_at)
+            select(User.username, User.avatar_url,
+                   Message.text, Message.created_at)
             .join(Message, Message.user_id == User.id)
             .order_by(Message.created_at.desc())
             .limit(100)
