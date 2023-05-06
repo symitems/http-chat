@@ -14,6 +14,7 @@ export default function Chat() {
   const [isErr, setIsErr] = useState(false);
   const [post, setPost] = useState({});
   const [timezone, setTimezone] = useState();
+  const title = process.env.REACT_APP_TITLE
   const inputTextRef = useRef();
   const inputTimezoneRef = useRef();
   const setModalIsShown = useContext(ModalContext).isModalShown[1];
@@ -180,12 +181,16 @@ export default function Chat() {
         }}
       >
         <div>
-          <h1>
-            HTTP CHAT{" "}
-            <small>
-              <small>by iwsh</small>
-            </small>
-          </h1>
+          {
+            title ? <h1>{title}</h1> : (
+              <h1>
+                HTTP CHAT{" "}
+                <small>
+                  <small>by iwsh</small>
+                </small>
+              </h1>
+            )
+          }
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <select

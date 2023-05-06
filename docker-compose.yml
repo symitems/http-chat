@@ -22,7 +22,7 @@ services:
       - REACT_APP_GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
       - REACT_APP_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - REACT_APP_BACKEND_BASEURL=http://api:8000
-
+      - REACT_APP_TITLE=DEVELOP CHAT
   api:
     build:
       context: api
