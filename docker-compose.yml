@@ -22,6 +22,7 @@ services:
       - REACT_APP_GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
       - REACT_APP_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - REACT_APP_BACKEND_BASEURL=http://api:8000
+
   api:
     build:
       context: api
@@ -39,6 +40,12 @@ services:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - UI_ORIGIN=${UI_ORIGIN}
+      - S3_ENDPOINT=http://minio:9000
+      - S3_ENDPOINT_FE=http://localhost:9000
+      - S3_BUCKET_NAME=http-chat
+      - AWS_ACCESS_KEY_ID=admin
+      - AWS_SECRET_ACCESS_KEY=adminpass
+      - AWS_REGION=us-east-1
     entrypoint:
       - "/usr/local/bin/wait-for-it.sh"
       - "db:5432"
@@ -53,6 +60,8 @@ services:
       - "0.0.0.0"
     depends_on:
       - db
+      - minio
+
   db:
     image: postgres:15.1
     restart: always
@@ -62,3 +71,39 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - ./db:/var/lib/postgresql/data
+
+  pgweb:
+    image: sosedoff/pgweb
+    ports:
+      - "8080:8081"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+    depends_on:
+      - db
+
+  minio:
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: "admin"
+      MINIO_ROOT_PASSWORD: "adminpass"
+    image: quay.io/minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./minio_data:/data
+
+  mc-init:
+    image: minio/mc
+    depends_on:
+      - minio
+    environment:
+      MINIO_ROOT_USER: "admin"
+      MINIO_ROOT_PASSWORD: "adminpass"
+      MINIO_BUCKET_NAME: "http-chat"
+    entrypoint: >
+      bash -c "
+        mc alias set myminio http://minio:9000 admin adminpass;
+        mc mb -p myminio/$$MINIO_BUCKET_NAME;
+        mc anonymous set download myminio/$$MINIO_BUCKET_NAME;
+      "

@@ -6,6 +6,7 @@ import { backend_api } from "../helper/ApiHelper";
 import ModalContext from '../contexts/ModalContext';
 import MessageForm from '../components/MessageForm';
 import MessageList from '../components/MessageList';
+import { AppBar, ThemeProvider, Toolbar, createTheme } from '@mui/material';
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -47,36 +48,35 @@ export default function Chat() {
         setIsAuthorized(true);
       })
       .catch((error) => {
+        console.error(error.response)
+        setIsErr(true);
+        setModalIsShown(true);
         if (error.response.status === 401) {
-          setModalIsShown(true);
           setmodalTitle("Logout");
           setModalMessage("Authentication expired. Login again.");
           logoutAndNavigateLogin();
-          isErr || setIsErr(true);
         } else if (error.response.status === 403) {
-          setModalIsShown(true);
           setmodalTitle("Account is NOT active");
           setModalMessage("Please ask the administrator to activate your account");
-          isErr || setIsErr(true);
         } else {
-          setModalIsShown(true);
           setmodalTitle("Sorry!!");
           setModalMessage("An error occurred in the application. Please contact the administrator to resolve the issue.");
-          isErr || setIsErr(true);
         }
-      }
-      );
-  }, [logoutAndNavigateLogin, setModalIsShown, setmodalTitle, setModalMessage, isErr, setIsErr])
+      });
+  }, [logoutAndNavigateLogin, setModalIsShown, setmodalTitle, setModalMessage, setIsErr])
 
   useEffect(() => {
-    getMessage()
-    const interval = setInterval((isErr) => {
+    getMessage();
+    const interval = setInterval(() => {
       if (isErr) {
         clearInterval(interval);
-        return
       }
-      getMessage()
+      else {
+        getMessage();
+      }
     }, 3000, [isErr]);
+
+    return () => clearInterval(interval)
   }, [getMessage, isErr]);
 
   const clickSubmit = () => {
@@ -208,20 +208,24 @@ export default function Chat() {
       <hr></hr>
       {
         isAuthorized && (
-          <MessageForm
-            ref={inputTextRef}
-            onChange={handleText}
-            onKeyDown={handleKeyDown}
-            onClickSubmit={clickSubmit}
-            onClickClearAll={clickClear}
-          />
+          <div>
+            <MessageForm
+              ref={inputTextRef}
+              onChange={handleText}
+              onKeyDown={handleKeyDown}
+              onClickSubmit={clickSubmit}
+              onClickClearAll={clickClear}
+            />
+          </div>
         )
       }
+
       {msgs.map((msg, index) => {
         return (
           <MessageList msg={msg} changeTimezone={changeTimezone} key={index} />
         );
       })}
+
     </div>
   );
 }

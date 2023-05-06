@@ -34,7 +34,6 @@ class UserManager:
                     session.rollback()
                     raise e
 
-
     def get_user_id(self, username: str) -> int:
         q_select_user_id = select(User.id).where(
             User.username == username)

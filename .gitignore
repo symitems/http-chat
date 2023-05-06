@@ -2,3 +2,4 @@ db/
 .vscode/
 .env
 venv/
+minio_data/

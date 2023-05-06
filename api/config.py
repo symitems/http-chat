@@ -13,6 +13,12 @@ class Config:
         self.google_client_id = os.getenv("GOOGLE_CLIENT_ID")
         self.google_client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
         self.ui_origin = os.getenv("UI_ORIGIN")
+        self.s3_endpoint = os.getenv("S3_ENDPOINT")
+        self.s3_endpoint_frontend = os.getenv("S3_ENDPOINT_FE")
+        self.s3_bucket_name = os.getenv("S3_BUCKET_NAME")
+        self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
+        self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+        self.aws_region = os.getenv("AWS_REGION")
 
         if os.getenv("PG_HOST"):
             self.db_type = "postgresql"
@@ -41,6 +47,7 @@ class Config:
         else:
             self.db_type = "sqlite"
             self.db_url = "sqlite:///sqlite.db"
+        print(self)
 
 
 config = Config()

@@ -32,7 +32,8 @@ class SocialAccountGithub(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     social_id: Mapped[str] = mapped_column(String(40), unique=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"))
     user: Mapped["User"] = relationship(
         back_populates="social_account_github")
 
@@ -48,7 +49,8 @@ class SocialAccountGoogle(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     social_id: Mapped[str] = mapped_column(String(40), unique=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"))
     user: Mapped["User"] = relationship(
         back_populates="social_account_google")
 
