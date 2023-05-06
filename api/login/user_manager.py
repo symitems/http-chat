@@ -25,10 +25,14 @@ class UserManager:
             new_social_account = SocialAccount(
                 social_id=social_id, user=new_user)
             with Session(engine) as session:
-                session.add(new_user)
-                session.add(new_social_account)
-                session.flush()
-                session.commit()
+                try:
+                    session.add(new_user)
+                    session.add(new_social_account)
+                    session.flush()
+                    session.commit()
+                except Exception as e:
+                    session.rollback()
+                    raise e
 
     def get_user_id(self, username: str) -> int:
         q_select_user_id = select(User.id).where(

@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, File, UploadFile
 from pydantic import BaseModel
 
 from .message_manager import message_manager
@@ -19,6 +19,8 @@ class MessageController:
             "/messages/", self.post_item, methods=["POST"])
         self.router.add_api_route(
             "/messages/", self.delete_all, methods=["DELETE"])
+        self.router.add_api_route(
+            "/images/", self.post_image, methods=["POST"])
 
     def get_item(self, current_user: str = Depends(get_current_user)):
         message_manager.authorize(current_user)
@@ -30,6 +32,12 @@ class MessageController:
         message_manager.authorize(current_user)
         msg.username = current_user
         df_msg = message_manager.post_messages(msg)
+        return df_msg.to_dict("records")
+
+    def post_image(self, file: UploadFile = File(...),
+                   current_user: str = Depends(get_current_user)):
+        message_manager.authorize(current_user)
+        df_msg = message_manager.post_image(current_user, file)
         return df_msg.to_dict("records")
 
     def delete_all(self, current_user: str = Depends(get_current_user)):

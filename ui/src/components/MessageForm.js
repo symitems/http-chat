@@ -1,5 +1,9 @@
 import { forwardRef } from 'react';
 import '../App.css';
+import { Fab, Grid } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import SendIcon from '@mui/icons-material/Send';
+import ImageUploadButtom from '../components/ImageUploadButtom';
 
 export default forwardRef((props, ref) => {
     return (
@@ -8,29 +12,38 @@ export default forwardRef((props, ref) => {
                 <table cellPadding={5}>
                     <tbody>
                         <tr>
-                            <td valign="middle">Message:</td>
                             <td>
                                 <textarea
                                     style={{ fontSize: "16px" }}
                                     ref={ref}
-                                    cols="22"
-                                    rows="5"
+                                    cols="25"
+                                    rows="4"
                                     onChange={props.onChange}
                                     onKeyDown={props.onKeyDown}
                                     required
                                 />
                             </td>
+                            <td>
+                                <Fab variant="contained" component="span" size="small" onClick={props.onClickSubmit}>
+                                    <SendIcon fontSize="small" />
+                                </Fab>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
-                <button type="submit" onClick={props.onClickSubmit}>
-                    <big>Submit</big>
-                </button>
                 <hr></hr>
             </div>
-            <button type="submit" onClick={props.onClickClearAll}>
-                <big>Clear All</big>
-            </button>
-        </div>
+            <Grid
+                container
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+            >
+                <ImageUploadButtom />
+                <Fab variant="contained" component="span" size="small" onClick={props.onClickClearAll}>
+                    <ClearIcon fontSize="small" />
+                </Fab>
+            </Grid>
+        </div >
     )
 })
