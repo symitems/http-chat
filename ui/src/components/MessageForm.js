@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import '../App.css';
-import { Button, Fab, Grid } from '@mui/material';
+import { Fab, Grid } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import SendIcon from '@mui/icons-material/Send';
 import ImageUploadButtom from '../components/ImageUploadButtom';

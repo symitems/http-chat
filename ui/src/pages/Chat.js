@@ -6,7 +6,6 @@ import { backend_api } from "../helper/ApiHelper";
 import ModalContext from '../contexts/ModalContext';
 import MessageForm from '../components/MessageForm';
 import MessageList from '../components/MessageList';
-import { AppBar, ThemeProvider, Toolbar, createTheme } from '@mui/material';
 
 export default function Chat() {
   const navigate = useNavigate();
