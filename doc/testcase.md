@@ -2,6 +2,7 @@
 
 - Login with both Github and Google and redirect to /chat
 - Submit message
+- Submit image
 - Clear all message
 - Display datetime both UTC and JST
 - Logout successfully
@@ -9,5 +10,5 @@
 - When visiting chat page with invalid code paramater, you can see
   - Modal window with error message
   - 401 error in console of the developer tool of your browser
-- Confirm that new messages go to the top
-- the changes are compatible with the previous version (If not, write clearly in the pull-request)
+- Latest message appears at the top
+- The changes are compatible with the previous version (If not, write clearly in the pull-request)
