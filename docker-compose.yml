@@ -46,6 +46,10 @@ services:
       - AWS_ACCESS_KEY_ID=admin
       - AWS_SECRET_ACCESS_KEY=adminpass
       - AWS_REGION=us-east-1
+      - FAKER_ENABLED=True
+      - FAKER_OPENAI_APIKEY=${FAKER_OPENAI_APIKEY}
+      - FAKER_TRIGGER_PROBABILITY=1.0
+
     entrypoint:
       - "/usr/local/bin/wait-for-it.sh"
       - "db:5432"

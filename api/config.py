@@ -19,6 +19,14 @@ class Config:
         self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
         self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
         self.aws_region = os.getenv("AWS_REGION")
+        self.faker_enabled = os.getenv("FAKER_ENABLED", default=None)
+        self.faker_openai_apikey = os.getenv("FAKER_OPENAI_APIKEY", default=None)
+        self.faker_trigger_probability = float(
+            os.getenv("FAKER_TRIGGER_PROBABILITY", default="0.1")
+        )
+        self.faker_interval_seconds = int(
+            os.getenv("FAKER_INTERVAL_SECONDS", default="21")
+        )
 
         if os.getenv("PG_HOST"):
             self.db_type = "postgresql"

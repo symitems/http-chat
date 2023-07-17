@@ -7,3 +7,5 @@ requests
 SQLAlchemy
 boto3
 python-multipart
+apscheduler
+openai
