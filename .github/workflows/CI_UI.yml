@@ -17,13 +17,13 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ["16.x"]
+        node-version: [16, 18]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
       - name: start notification
         id: slack_start
-        uses: slackapi/slack-github-action@v1.22.0
+        uses: slackapi/slack-github-action@v1.23.0
         with:
           payload: |
             {
@@ -45,7 +45,7 @@ jobs:
           REACT_APP_BACKEND_BASEURL: ${{ secrets.BACKEND_BASEURL }}
       - name: complete notification
         id: slack_complete
-        uses: slackapi/slack-github-action@v1.22.0
+        uses: slackapi/slack-github-action@v1.23.0
         with:
           payload: |
             {
