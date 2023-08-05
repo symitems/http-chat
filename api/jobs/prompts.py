@@ -2,6 +2,7 @@ from sqlalchemy import select
 
 from models import User, Message, engine
 from logger import logger
+from config import config
 
 PROMPT_TEMPLATE = """
 == Situation ==
@@ -9,6 +10,7 @@ PROMPT_TEMPLATE = """
 - Send a latest single line message to the Chat Room as {user}.
 - You shoud consider {user}'s personality and emotion based on the chat history
 - Refer to the previous messages so to send a message with a similar length as the messages from the other members.
+- You must speak {faker_language}
 
 == Chat Room ==
 {history_lines}
@@ -20,7 +22,14 @@ PROMPT_TEMPLATE = """
 
 def generate_rp_prompt(role: str) -> str:
     history = get_history()
-    return PROMPT_TEMPLATE.format_map({"user": role, "history_lines": history})
+    role = cleansing_username(role)
+    return PROMPT_TEMPLATE.format_map(
+        {
+            "user": role,
+            "history_lines": history,
+            "faker_language": config.faker_language,
+        }
+    )
 
 
 def get_history() -> str:

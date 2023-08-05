@@ -15,7 +15,9 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"mhutchie.git-graph"
+				"mhutchie.git-graph",
+				"ms-python.black-formatter",
+				"VisualStudioExptTeam.vscodeintellicode"
 			]
 		}
 	}
