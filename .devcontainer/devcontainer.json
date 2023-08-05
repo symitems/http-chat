@@ -11,5 +11,12 @@
 		"ghcr.io/devcontainers-contrib/features/black:2": {},
 		"ghcr.io/devcontainers-contrib/features/npm-package:1": {},
 		"ghcr.io/devcontainers-contrib/features/prettier:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"mhutchie.git-graph"
+			]
+		}
 	}
 }
