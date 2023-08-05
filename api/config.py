@@ -27,6 +27,7 @@ class Config:
         self.faker_interval_seconds = int(
             os.getenv("FAKER_INTERVAL_SECONDS", default="21")
         )
+        self.faker_language = os.getenv("FAKER_LANGUAGE", default="Japanese")
 
         if os.getenv("PG_HOST"):
             self.db_type = "postgresql"
