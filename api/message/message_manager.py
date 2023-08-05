@@ -44,9 +44,9 @@ class MessageManager:
 
         return df_message
 
-    def post_messages(self, msg):
-        user_id = user_manager.get_user_id(username=msg.username)
-        message = Message(text=msg.text, user_id=user_id)
+    def post_messages(self, username: str, text: str):
+        user_id = user_manager.get_user_id(username=username)
+        message = Message(text=text, user_id=user_id)
 
         with Session(engine) as session:
             session.add(message)

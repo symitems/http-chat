@@ -6,7 +6,6 @@ from helper.auth_helper import get_current_user
 
 
 class Msg(BaseModel):
-    username: str | None
     text: str
 
 
@@ -30,8 +29,7 @@ class MessageController:
     def post_item(self, msg: Msg,
                   current_user: str = Depends(get_current_user)):
         message_manager.authorize(current_user)
-        msg.username = current_user
-        df_msg = message_manager.post_messages(msg)
+        df_msg = message_manager.post_messages(current_user, msg.text)
         return df_msg.to_dict("records")
 
     def post_image(self, file: UploadFile = File(...),
